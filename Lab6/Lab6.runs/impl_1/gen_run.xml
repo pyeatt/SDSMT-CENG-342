@@ -1,43 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1584848069">
-  <File Type="BITSTR-BMM" Name="genericALU_bd.bmm"/>
-  <File Type="OPT-METHODOLOGY-DRC" Name="genericALU_methodology_drc_opted.rpt"/>
-  <File Type="INIT-TIMING" Name="genericALU_timing_summary_init.rpt"/>
   <File Type="ROUTE-PWR" Name="genericALU_power_routed.rpt"/>
   <File Type="PA-TCL" Name="genericALU.tcl"/>
-  <File Type="OPT-TIMING" Name="genericALU_timing_summary_opted.rpt"/>
-  <File Type="OPT-DCP" Name="genericALU_opt.dcp"/>
+  <File Type="BITSTR-BMM" Name="genericALU_bd.bmm"/>
   <File Type="ROUTE-PWR-SUM" Name="genericALU_power_summary_routed.pb"/>
   <File Type="REPORTS-TCL" Name="genericALU_reports.tcl"/>
+  <File Type="OPT-DCP" Name="genericALU_opt.dcp"/>
   <File Type="OPT-DRC" Name="genericALU_drc_opted.rpt"/>
   <File Type="OPT-HWDEF" Name="genericALU.hwdef"/>
   <File Type="PWROPT-DCP" Name="genericALU_pwropt.dcp"/>
-  <File Type="PWROPT-DRC" Name="genericALU_drc_pwropted.rpt"/>
-  <File Type="PWROPT-TIMING" Name="genericALU_timing_summary_pwropted.rpt"/>
   <File Type="PLACE-DCP" Name="genericALU_placed.dcp"/>
   <File Type="PLACE-IO" Name="genericALU_io_placed.rpt"/>
-  <File Type="PLACE-CLK" Name="genericALU_clock_utilization_placed.rpt"/>
   <File Type="PLACE-UTIL" Name="genericALU_utilization_placed.rpt"/>
   <File Type="PLACE-UTIL-PB" Name="genericALU_utilization_placed.pb"/>
   <File Type="PLACE-CTRL" Name="genericALU_control_sets_placed.rpt"/>
-  <File Type="PLACE-SIMILARITY" Name="genericALU_incremental_reuse_placed.rpt"/>
   <File Type="PLACE-PRE-SIMILARITY" Name="genericALU_incremental_reuse_pre_placed.rpt"/>
-  <File Type="PLACE-TIMING" Name="genericALU_timing_summary_placed.rpt"/>
   <File Type="POSTPLACE-PWROPT-DCP" Name="genericALU_postplace_pwropt.dcp"/>
   <File Type="BG-BIN" Name="genericALU.bin"/>
-  <File Type="POSTPLACE-PWROPT-TIMING" Name="genericALU_timing_summary_postplace_pwropted.rpt"/>
   <File Type="PHYSOPT-DCP" Name="genericALU_physopt.dcp"/>
-  <File Type="PHYSOPT-DRC" Name="genericALU_drc_physopted.rpt"/>
   <File Type="BITSTR-MSK" Name="genericALU.msk"/>
-  <File Type="PHYSOPT-TIMING" Name="genericALU_timing_summary_physopted.rpt"/>
   <File Type="ROUTE-ERROR-DCP" Name="genericALU_routed_error.dcp"/>
   <File Type="ROUTE-DCP" Name="genericALU_routed.dcp"/>
   <File Type="ROUTE-BLACKBOX-DCP" Name="genericALU_routed_bb.dcp"/>
   <File Type="ROUTE-DRC" Name="genericALU_drc_routed.rpt"/>
   <File Type="ROUTE-DRC-PB" Name="genericALU_drc_routed.pb"/>
   <File Type="ROUTE-DRC-RPX" Name="genericALU_drc_routed.rpx"/>
-  <File Type="BITSTR-MMI" Name="genericALU.mmi"/>
   <File Type="ROUTE-METHODOLOGY-DRC" Name="genericALU_methodology_drc_routed.rpt"/>
+  <File Type="BITSTR-MMI" Name="genericALU.mmi"/>
   <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="genericALU_methodology_drc_routed.rpx"/>
   <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="genericALU_methodology_drc_routed.pb"/>
   <File Type="ROUTE-PWR-RPX" Name="genericALU_power_routed.rpx"/>
@@ -46,20 +35,13 @@
   <File Type="ROUTE-TIMINGSUMMARY" Name="genericALU_timing_summary_routed.rpt"/>
   <File Type="ROUTE-TIMING-PB" Name="genericALU_timing_summary_routed.pb"/>
   <File Type="ROUTE-TIMING-RPX" Name="genericALU_timing_summary_routed.rpx"/>
-  <File Type="ROUTE-SIMILARITY" Name="genericALU_incremental_reuse_routed.rpt"/>
   <File Type="ROUTE-CLK" Name="genericALU_clock_utilization_routed.rpt"/>
   <File Type="ROUTE-BUS-SKEW" Name="genericALU_bus_skew_routed.rpt"/>
   <File Type="ROUTE-BUS-SKEW-PB" Name="genericALU_bus_skew_routed.pb"/>
   <File Type="ROUTE-BUS-SKEW-RPX" Name="genericALU_bus_skew_routed.rpx"/>
   <File Type="POSTROUTE-PHYSOPT-DCP" Name="genericALU_postroute_physopt.dcp"/>
   <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="genericALU_postroute_physopt_bb.dcp"/>
-  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="genericALU_timing_summary_postroute_physopted.rpt"/>
-  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="genericALU_timing_summary_postroute_physopted.pb"/>
-  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="genericALU_timing_summary_postroute_physopted.rpx"/>
-  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW" Name="genericALU_bus_skew_postroute_physopted.rpt"/>
-  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="genericALU_bus_skew_postroute_physopted.pb"/>
   <File Type="BG-BIT" Name="genericALU.bit"/>
-  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="genericALU_bus_skew_postroute_physopted.rpx"/>
   <File Type="BITSTR-RBT" Name="genericALU.rbt"/>
   <File Type="BITSTR-NKY" Name="genericALU.nky"/>
   <File Type="PDI-FILE" Name="genericALU.pdi"/>
@@ -68,7 +50,6 @@
   <File Type="RNPI_FILE" Name="genericALU.rnpi"/>
   <File Type="NPI_FILE" Name="genericALU.npi"/>
   <File Type="RBD_FILE" Name="genericALU.rbd"/>
-  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
   <File Type="BITSTR-LTX" Name="genericALU.ltx"/>
   <File Type="BITSTR-SYSDEF" Name="genericALU.sysdef"/>
   <File Type="BG-BGN" Name="genericALU.bgn"/>
@@ -79,7 +60,7 @@
     <Filter Type="Srcs"/>
     <File Path="$PSRCDIR/sources_1/imports/new/full_adder.vhd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../Lab4/Lab4.srcs/sources_1/imports/new/full_adder.vhd"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../Lab4/Lab4.srcs/sources_1/imports/new/full_adder.vhd"/>
         <Attr Name="ImportTime" Val="1581985296"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -87,7 +68,7 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/new/lookahead_2bit.vhd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../Lab4/Lab4.srcs/sources_1/imports/new/lookahead_2bit.vhd"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../Lab4/Lab4.srcs/sources_1/imports/new/lookahead_2bit.vhd"/>
         <Attr Name="ImportTime" Val="1582387806"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -95,7 +76,7 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/new/generic_full_adder_subtractor_lookahead.vhd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../Lab4/Lab4.srcs/sources_1/imports/new/generic_full_adder_subtractor_lookahead.vhd"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../Lab4/Lab4.srcs/sources_1/imports/new/generic_full_adder_subtractor_lookahead.vhd"/>
         <Attr Name="ImportTime" Val="1583374655"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -109,7 +90,7 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/new/genericShifter.vhd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../Lab5/Lab5.srcs/sources_1/new/genericShifter.vhd"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../Lab5/Lab5.srcs/sources_1/new/genericShifter.vhd"/>
         <Attr Name="ImportTime" Val="1583036424"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -162,5 +143,6 @@
     <Step Id="route_design"/>
     <Step Id="post_route_phys_opt_design"/>
     <Step Id="write_bitstream"/>
+    <Step Id="write_device_image"/>
   </Strategy>
 </GenRun>

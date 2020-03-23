@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="synth_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1584848069">
   <File Type="PA-TCL" Name="genericALU.tcl"/>
-  <File Type="RDS-PROPCONSTRS" Name="genericALU_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="genericALU_reports.tcl"/>
   <File Type="RDS-RDS" Name="genericALU.vds"/>
   <File Type="RDS-UTIL" Name="genericALU_utilization_synth.rpt"/>
   <File Type="RDS-UTIL-PB" Name="genericALU_utilization_synth.pb"/>
   <File Type="RDS-DCP" Name="genericALU.dcp"/>
-  <File Type="VDS-TIMINGSUMMARY" Name="genericALU_timing_summary_synth.rpt"/>
-  <File Type="VDS-TIMING-PB" Name="genericALU_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
     <Filter Type="Srcs"/>
     <File Path="$PSRCDIR/sources_1/imports/new/full_adder.vhd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../Lab4/Lab4.srcs/sources_1/imports/new/full_adder.vhd"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../Lab4/Lab4.srcs/sources_1/imports/new/full_adder.vhd"/>
         <Attr Name="ImportTime" Val="1581985296"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -21,7 +18,7 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/new/lookahead_2bit.vhd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../Lab4/Lab4.srcs/sources_1/imports/new/lookahead_2bit.vhd"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../Lab4/Lab4.srcs/sources_1/imports/new/lookahead_2bit.vhd"/>
         <Attr Name="ImportTime" Val="1582387806"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -29,7 +26,7 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/new/generic_full_adder_subtractor_lookahead.vhd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../Lab4/Lab4.srcs/sources_1/imports/new/generic_full_adder_subtractor_lookahead.vhd"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../Lab4/Lab4.srcs/sources_1/imports/new/generic_full_adder_subtractor_lookahead.vhd"/>
         <Attr Name="ImportTime" Val="1583374655"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -43,7 +40,7 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/new/genericShifter.vhd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../Lab5/Lab5.srcs/sources_1/new/genericShifter.vhd"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../Lab5/Lab5.srcs/sources_1/new/genericShifter.vhd"/>
         <Attr Name="ImportTime" Val="1583036424"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>

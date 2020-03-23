@@ -1,0 +1,17 @@
+#-----------------------------------------------------------
+# Vivado v2019.2 (64-bit)
+# SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+# IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+# Start of session at: Mon Mar 23 16:23:05 2020
+# Process ID: 18884
+# Current directory: C:/Users/7471624/CENG_342_VHDL/Repo/SDSMT-CENG-342/Lab6
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent14588 C:\Users\7471624\CENG_342_VHDL\Repo\SDSMT-CENG-342\Lab6\Lab6.xpr
+# Log file: C:/Users/7471624/CENG_342_VHDL/Repo/SDSMT-CENG-342/Lab6/vivado.log
+# Journal file: C:/Users/7471624/CENG_342_VHDL/Repo/SDSMT-CENG-342/Lab6\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/7471624/CENG_342_VHDL/Repo/SDSMT-CENG-342/Lab6/Lab6.xpr
+launch_simulation
+source genericALU_testbench.tcl
+update_compile_order -fileset sources_1
+close_sim

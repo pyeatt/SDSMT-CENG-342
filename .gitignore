@@ -1,6 +1,8 @@
 #########################################################################################################
 ##	This is an example .gitignore file for Vivado, please treat it as an example as 
-##	it might not be complete. In addition, XAPP 1165 should be followed.
+##	it might not be complete.
+##	This file has been modified from its original form. For the original, use link:
+##	https://www.xilinx.com/support/answers/61232.html
 #########################################################################################################
 #########
 #Exclude all

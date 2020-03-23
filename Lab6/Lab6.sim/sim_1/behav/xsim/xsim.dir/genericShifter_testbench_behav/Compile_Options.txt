@@ -1,0 +1,1 @@
+-wto "c9224b29b7614729b278dfdc5b89fdd0" --incr --debug "typical" --relax --mt "2" -L "xil_defaultlib" -L "secureip" --snapshot "genericShifter_testbench_behav" "xil_defaultlib.genericShifter_testbench" -log "elaborate.log" 

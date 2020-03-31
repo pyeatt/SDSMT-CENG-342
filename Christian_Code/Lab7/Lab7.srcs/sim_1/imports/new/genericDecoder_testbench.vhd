@@ -7,7 +7,7 @@
 -- Design Name: genericDecoder_testbench
 -- Project Name: Lab7
 ----------------------------------------------------------------------------------
-
+-- test time for 8-bit: 80ns
 
 library ieee;
 use ieee.std_logic_1164.all;

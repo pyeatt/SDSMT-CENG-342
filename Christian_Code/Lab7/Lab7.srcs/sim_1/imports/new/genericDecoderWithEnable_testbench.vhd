@@ -7,6 +7,7 @@
 -- Design Name: genericDecoderWithEnable_testbench
 -- Project Name: Lab7
 ----------------------------------------------------------------------------------
+-- test time for 8-bit: 80ns
 
 
 library ieee;

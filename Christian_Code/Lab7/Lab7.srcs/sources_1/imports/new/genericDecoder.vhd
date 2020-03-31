@@ -16,7 +16,7 @@ use ieee.numeric_std.all;
 
 entity genericDecoder is
     generic(
-        bits: integer := 1 -- number of selector inputs
+        bits: integer := 3 -- number of selector inputs
         );
     port(
         sel: in std_logic_vector(bits-1 downto 0); -- selector inputs

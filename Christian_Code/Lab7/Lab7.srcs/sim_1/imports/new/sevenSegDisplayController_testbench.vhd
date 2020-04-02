@@ -23,11 +23,11 @@ architecture tb_arch of sevenSegDisplayController_testbench is
     signal wr: std_logic:='1'; -- write enable (active low)
     signal reset: std_logic:='1'; -- asynch reset (active low)
     signal clock: std_logic:='1'; -- clock
-    signal address: std_logic_vector(2 downto 0):="000";
-    signal data_in: std_logic_vector(7 downto 0):="00000000";
-    signal sseg: std_logic_vector(7 downto 0):="00000000";
-    signal an: std_logic_vector(7 downto 0):="00000000";
-    signal data_count:unsigned(7 downto 0) := "00000000" ;
+    signal address: std_logic_vector(2 downto 0) := (others=>'0');
+    signal data_in: std_logic_vector(4 downto 0) := (others=>'0');
+    signal sseg: std_logic_vector(7 downto 0) := (others=>'0');
+    signal an: std_logic_vector(7 downto 0) := (others=>'0');
+    signal data_count: unsigned(4 downto 0) := (others=>'0');
 begin
     disp: entity work.sevenSegDisplayController(struct_arch)
         generic map(

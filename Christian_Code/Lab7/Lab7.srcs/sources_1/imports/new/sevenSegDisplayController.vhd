@@ -25,7 +25,7 @@ entity sevenSegDisplayController is
         wr: in std_logic; -- write enable (active low)
         reset: in std_logic; -- asynch reset (active low)
         address: in std_logic_vector(adr_bits-1 downto 0); -- address
-        data_in: in std_logic_vector(7 downto 0); -- dp is on data(5)
+        data_in: in std_logic_vector(4 downto 0); -- dp is on data(5)
         clock: in std_logic; -- clock
         sseg: out std_logic_vector(7 downto 0); -- segment drivers
         an: out std_logic_vector(2**adr_bits-1 downto 0) -- anodes

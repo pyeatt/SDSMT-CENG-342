@@ -2,10 +2,10 @@
 -- Author: Christian Weaver & Larry Pyeatt
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 03/30/2020
--- Lab 7
--- Design Name: genericRegisterFile
--- Project Name: Lab7
+-- Date: 04/02/2020
+-- Lab 8
+-- Design Name: LPU_datapath
+-- Project Name: Lab8
 ----------------------------------------------------------------------------------
 
 
@@ -65,10 +65,10 @@ begin
             Asel => Asel,
             Bsel => Bsel,
             Dsel => Dsel,
-            Dlen => Dlen,
-            Data_in => RegFile_in,
-            A_bus => A_bus,
-            B_bus => B_bus,
+            WriteEn => Dlen,
+            Din => RegFile_in,
+            Aout => A_bus,
+            Bout => B_bus,
             Clock => Clock,
             Reset => Reset
             );
@@ -104,16 +104,16 @@ begin
             bits => data_width
             )
         port map(
-            PC_in => ALU_out,
-            PC_out => PC_out,
-            EdgeLoad => PCle,
-            EdgeInc => PCie,
+            PCin => ALU_out,
+            PCout => PC_out,
+            LoadEn => PCle,
+            Inc => PCie,
             Clock => Clock,
             Reset => Reset
             );
 
     CCR:
-        entity work.CCR(arch)
+        entity work.LPU_CCR(arch)
         port map(
             CCR_in => CCR_in,
             CCR_out => CCR_out,

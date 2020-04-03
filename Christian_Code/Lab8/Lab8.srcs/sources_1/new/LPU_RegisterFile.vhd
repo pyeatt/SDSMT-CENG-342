@@ -28,7 +28,7 @@ entity LPU_RegisterFile is
             Din: in std_logic_vector(dataWidth-1 downto 0); -- Input data
             Aout: out std_logic_vector(dataWidth-1 downto 0); -- A output
             Bout: out std_logic_vector(dataWidth-1 downto 0); -- B output
-            Clock: in std_logic; -- clock (triggered on rising edge)
+            Clock: in std_logic; -- Clock (triggered on rising edge)
             Reset: in std_logic -- Active low reset
             );
 end LPU_RegisterFile;
@@ -48,8 +48,8 @@ begin
                 )
             port map(
                 en => Enable(i),
-                clk => clock,
-                reset => reset,
+                clk => Clock,
+                reset => Reset,
                 d => Din,
                 q => Dout(i)
                 );

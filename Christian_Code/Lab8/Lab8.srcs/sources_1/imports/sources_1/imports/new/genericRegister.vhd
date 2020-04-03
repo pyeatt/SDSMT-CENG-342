@@ -32,7 +32,7 @@ architecture ifelse_arch of genericRegister is
     signal latched_data: std_logic_vector(bits-1 downto 0);
 begin
     process(en,clk,reset)
-    begin
+    begin -- make syncronous
         if reset = '0' then -- if reset is enabled
             latched_data <= (others => '0'); -- clear data
         elsif en='0' and clk'event and clk='1' then -- rising-edge enabled

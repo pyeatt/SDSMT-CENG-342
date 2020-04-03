@@ -21,8 +21,8 @@ entity LPU_PC is
         Increment: integer := 2 -- Value to increment the counter by
         );
     port(
-        PCin: in std_logic_vector(numBits-1 downto 0); -- Data bus to load in a new value to the counter
-        PCout: out std_logic_vector(numBits-1 downto 0); -- Data bus to output the current value of the counter
+        PCin: in std_logic_vector(NumBits-1 downto 0); -- Data bus to load in a new value to the counter
+        PCout: out std_logic_vector(NumBits-1 downto 0); -- Data bus to output the current value of the counter
         LoadEn: in std_logic; -- Active low enable for loading in a new value to the counter
         Inc: in std_logic; -- Active low enable for incrementing the value held in the counter
         Clock: in std_logic; -- Clock (triggered on rising edge)

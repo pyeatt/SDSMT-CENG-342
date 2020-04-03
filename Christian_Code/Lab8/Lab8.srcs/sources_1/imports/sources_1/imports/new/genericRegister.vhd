@@ -20,7 +20,7 @@ entity genericRegister is
     port(
         en: in std_logic; -- active low enable (enable for write)
         clk: in std_logic; -- rising edge-triggered
-        reset: in std_logic; -- active low asynchronous reset
+        reset: in std_logic; -- active low synchronous reset
         d: in std_logic_vector(bits-1 downto 0);
         q: out std_logic_vector(bits-1 downto 0)
         );
@@ -32,11 +32,13 @@ architecture ifelse_arch of genericRegister is
     signal latched_data: std_logic_vector(bits-1 downto 0);
 begin
     process(en,clk,reset)
-    begin -- make syncronous
-        if reset = '0' then -- if reset is enabled
-            latched_data <= (others => '0'); -- clear data
-        elsif en='0' and clk'event and clk='1' then -- rising-edge enabled
-            latched_data <= d; -- shift in new value
+    begin
+        if clk'event and clk='1' then -- rising-edge enabled
+            if reset = '0' then -- if reset is enabled
+                latched_data <= (others => '0'); -- clear data
+            elsif en='0' then
+                latched_data <= d; -- shift in new value
+            end if;
         end if;
     end process;
     

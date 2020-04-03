@@ -39,7 +39,7 @@ entity LPU_datapath is
         MARle: in std_logic; -- A `0' indicates that the Memory Address Register and Memory Data Register should be loaded on the rising clock edge
         MCRle: in std_logic; -- A `0' indicates that the Memory Control Register should be loaded on the rising clock edge
         Address: out std_logic_vector(data_width-1 downto 0); -- Address provided to Memory and I/O devices for read and write operations
-        Control: put std_logic; -- ???
+        Control: out std_logic_vector(3 downto 0); -- ???
         Reset: in std_logic; -- A `0' indicates that all registers should be set to zero. (Synchronous reset is preferred!)
         Clock: in std_logic -- Clock signal provided to all registers
         );
@@ -61,6 +61,10 @@ begin
 
     RegisterFile:
         entity work.LPU_RegisterFile(arch)
+        generic map(
+            DataWidth => data_width,
+            NumSelBits => 3
+            )
         port map(
             Asel => Asel,
             Bsel => Bsel,
@@ -101,7 +105,8 @@ begin
     PC:
         entity work.LPU_PC(arch)
         generic map(
-            bits => data_width
+            NumBits => data_width,
+            Increment => 2
             )
         port map(
             PCin => ALU_out,
@@ -115,9 +120,9 @@ begin
     CCR:
         entity work.LPU_CCR(arch)
         port map(
-            CCR_in => CCR_in,
-            CCR_out => CCR_out,
-            EdgeLoad => CCRle,
+            CCRin => CCR_in,
+            CCRout => CCR_out,
+            LoadEn => CCRle,
             Clock => Clock,
             Reset => Reset
             );
@@ -127,25 +132,31 @@ begin
     MCR:
         entity work.LPU_MCR(arch)
         port map(
-            MCtrl => MCtrl,
-            MCRle => MCRle,
-            Control => Control
+            MCRin => MCtrl,
+            MCRout => Control,
+            LoadEn => MCRle,
+            Clock => Clock,
+            Reset => Reset
             );
 
     MDR:
         entity work.LPU_MDR(arch)
         port map(
-            MARle => MARle,
-            Bus_in => B_bus,
-            outBus => Data_out
+            MDRin => B_bus,
+            MDRout => Data_out,
+            LoadEn => MARle,
+            Clock => Clock,
+            Reset => Reset
             );
 
     MAR:
         entity work.LPU_MAR(arch)
         port map(
-            MARle => MARle,
-            Bus_in => D_bus,
-            Address => Address
+            MARin => D_bus,
+            MARout => Address,
+            LoadEn => MARle,
+            Clock => Clock,
+            Reset => Reset
             );
 
     D_bus <= ALU_out when PCDsel = '0' else

@@ -20,15 +20,19 @@ end LPU_MDR_TB;
 
 -- testbench for LPU Memory Data Register
 architecture tb_arch of LPU_MDR_TB is
-    signal MDRin: std_logic_vector(31 downto 0) := (others => '0'); -- Data bus to load in a new value to the MDR
-    signal MDRout: std_logic_vector(31 downto 0); -- Data bus to output the current value of the MDR
+    constant NumBits: integer := 32;
+    signal MDRin: std_logic_vector(NumBits-1 downto 0) := (others => '0'); -- Data bus to load in a new value to the MDR
+    signal MDRout: std_logic_vector(NumBits-1 downto 0); -- Data bus to output the current value of the MDR
     signal LoadEn: std_logic := '1'; -- Active low enable for loading in a new value to the MDR
     signal Clock: std_logic := '1'; -- Clock (triggered on rising edge)
     signal Reset: std_logic := '1'; -- Active low syncronous reset
-    signal Control: unsigned(33 downto 0) := (others => '0'); -- internal signal
+    signal Control: unsigned(NumBits+1 downto 0) := (others => '0'); -- internal signal
 begin
     MDR:
         entity work.LPU_MDR(arch)
+        generic map(
+            NumBits => NumBits
+            )
         port map(
             MDRin => MDRin,
             MDRout => MDRout,
@@ -75,7 +79,7 @@ begin
         end loop;
     end process TestInput;
     
-    MDRin <= std_logic_vector(Control(33 downto 2));
+    MDRin <= std_logic_vector(Control(NumBits+1 downto 2));
     Clock <= Control(0);
 
 end tb_arch;

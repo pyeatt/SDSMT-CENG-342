@@ -89,6 +89,7 @@ begin
                 WriteEn <= '0';
                 wait for 10 ns;
                 WriteEn <= '1';
+                wait for 10 ns;
             end loop;
             
             -- read data from the register file

@@ -16,9 +16,12 @@ use ieee.numeric_std.all;
 
 -- This is the Memory Address Register for the LPU
 entity LPU_MAR is
+    generic(
+        NumBits: integer := 32
+        );
     port(
-        MARin: in std_logic_vector(31 downto 0); -- Data bus to load in a new value to the MAR
-        MARout: out std_logic_vector(31 downto 0); -- Data bus to output the current value of the MAR
+        MARin: in std_logic_vector(NumBits-1 downto 0); -- Data bus to load in a new value to the MAR
+        MARout: out std_logic_vector(NumBits-1 downto 0); -- Data bus to output the current value of the MAR
         LoadEn: in std_logic; -- Active low enable for loading in a new value to the MAR
         Clock: in std_logic; -- Clock (triggered on rising edge)
         Reset: in std_logic -- Active low syncronous reset
@@ -32,7 +35,7 @@ begin
     MDRegister:
         entity work.genericRegister(ifelse_arch)
         generic map(
-            bits => 32
+            bits => NumBits
             )
         port map(
             en => LoadEn,

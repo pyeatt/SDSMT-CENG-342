@@ -2,7 +2,7 @@
 -- Author: Christian Weaver & Larry Pyeatt
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 04/02/2020
+-- Date: 04/03/2020
 -- Lab 8
 -- Design Name: LPU_PC
 -- Project Name: Lab8
@@ -33,6 +33,7 @@ end LPU_PC;
 
 architecture arch of LPU_PC is
     signal Count: unsigned(NumBits-1 downto 0) := (others=>'0');
+    signal Count_next: unsigned(NumBits-1 downto 0) := (others=>'0');
 begin
 
     process(PCin, LoadEn, Inc, Clock, Reset)
@@ -43,11 +44,13 @@ begin
             elsif LoadEn = '0' then
                 Count <= unsigned(PCin); -- load new value to counter
             elsif Inc = '0' then
-                Count <= Count + Increment; -- increment counter
+                Count <= Count_next; -- increment counter
             end if;
         end if;
     end process;
-
+    
+    Count_next <= Count + Increment;
+    
     PCout <= std_logic_vector(Count);
 
 end arch;

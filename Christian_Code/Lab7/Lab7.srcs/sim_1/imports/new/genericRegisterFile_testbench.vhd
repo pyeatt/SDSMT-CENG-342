@@ -76,6 +76,7 @@ begin
                 enable <= '0';
                 wait for 10 ns;
                 enable <= '1';
+                wait for 10 ns;
             end loop;
             
             -- read data from the register file

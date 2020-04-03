@@ -16,9 +16,12 @@ use ieee.numeric_std.all;
 
 -- This is the Memory Data Register for the LPU
 entity LPU_MDR is
+    generic(
+        NumBits: integer := 32
+        );
     port(
-        MDRin: in std_logic_vector(31 downto 0); -- Data bus to load in a new value to the MDR
-        MDRout: out std_logic_vector(31 downto 0); -- Data bus to output the current value of the MDR
+        MDRin: in std_logic_vector(NumBits-1 downto 0); -- Data bus to load in a new value to the MDR
+        MDRout: out std_logic_vector(NumBits-1 downto 0); -- Data bus to output the current value of the MDR
         LoadEn: in std_logic; -- Active low enable for loading in a new value to the MDR
         Clock: in std_logic; -- Clock (triggered on rising edge)
         Reset: in std_logic -- Active low syncronous reset
@@ -32,7 +35,7 @@ begin
     MDRegister:
         entity work.genericRegister(ifelse_arch)
         generic map(
-            bits => 32
+            bits => NumBits
             )
         port map(
             en => LoadEn,

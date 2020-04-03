@@ -2,7 +2,7 @@
 -- Author: Christian Weaver & Larry Pyeatt
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 03/31/2020
+-- Date: 04/03/2020
 -- Lab 7
 -- Design Name: sevenSegDisplayController
 -- Project Name: Lab7
@@ -22,7 +22,7 @@ entity sevenSegDisplayController is
         );
     port(
         en: in std_logic; -- chip enable (active low)
-        wr: in std_logic; -- write enable (active low)
+        wr: in std_logic; -- write enable (active high)
         reset: in std_logic; -- asynch reset (active low)
         address: in std_logic_vector(adr_bits-1 downto 0); -- address
         data_in: in std_logic_vector(4 downto 0); -- dp is on data(5)
@@ -37,14 +37,18 @@ end sevenSegDisplayController;
 architecture struct_arch of sevenSegDisplayController is
     signal count: std_logic_vector(div_bits-1 downto 0);
     signal to_7seg_decoder: std_logic_vector(4 downto 0);
+    signal notWr: std_logic;
 begin
+    
+    -- make write enable active high
+    notWr <= not wr;
 
     -- a set of registers
     regs: entity work.genericRegisterFile(struct_arch)
         generic map(n_sel=>adr_bits)
         port map(
-            en=>en,
-            clk=>wr,
+            en=>notWr,
+            clk=>clock,
             rst=>reset,
             dsel=>address,
             d=>data_in(4 downto 0),

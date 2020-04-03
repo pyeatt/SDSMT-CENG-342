@@ -20,7 +20,7 @@ end sevenSegDisplayController_testbench;
 
 architecture tb_arch of sevenSegDisplayController_testbench is
     signal en: std_logic:='1'; -- chip enable (active low)
-    signal wr: std_logic:='1'; -- write enable (active low)
+    signal wr: std_logic:='1'; -- write enable (active high)
     signal reset: std_logic:='1'; -- asynch reset (active low)
     signal clock: std_logic:='1'; -- clock
     signal address: std_logic_vector(2 downto 0) := (others=>'0');
@@ -55,10 +55,10 @@ begin
                 address <= std_logic_vector(to_unsigned(i,3));
                 en<='0';
                 wait for 2 ns;
-                wr<='0';
+                wr<='1';
                 wait for 5 ns;
                 en<='1';
-                wr<='1';
+                wr<='0';
                 data_count <= data_count + 1;
             end loop;
             wait for 400ns;

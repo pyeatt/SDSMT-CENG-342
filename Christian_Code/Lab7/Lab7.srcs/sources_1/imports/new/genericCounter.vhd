@@ -2,7 +2,7 @@
 -- Author: Christian Weaver & Larry Pyeatt
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 03/14/2020
+-- Date: 04/03/2020
 -- Lab 7
 -- Design Name: genericCounter
 -- Project Name: Lab7
@@ -28,15 +28,18 @@ end genericCounter;
 -- if-else implementation of a generic counter
 architecture ifelse_arch of genericCounter is
     signal data: unsigned(bits-1 downto 0) := (others => '0');
+    signal data_next: unsigned(bits-1 downto 0) := (others => '0');
 begin
     process(clk,rst)
     begin
         if rst = '0' then
             data <= (others => '0'); -- reset count
         elsif clk'event and clk = '1' then -- change on rising edge
-            data <= data + 1; -- increment counter
+            data <= data_next; -- increment counter
         end if;
     end process;
+    
+    data_next <= data + 1;
     
     q <= std_logic_vector(data);
     

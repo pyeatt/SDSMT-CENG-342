@@ -20,12 +20,13 @@ end LPU_MAR_TB;
 
 -- testbench for LPU Memory Data Register
 architecture tb_arch of LPU_MAR_TB is
-    signal MARin: std_logic_vector(31 downto 0) := (others => '0'); -- Data bus to load in a new value to the MAR
-    signal MARout: std_logic_vector(31 downto 0); -- Data bus to output the current value of the MAR
+    constant NumBits: integer := 32;
+    signal MARin: std_logic_vector(NumBits-1 downto 0) := (others => '0'); -- Data bus to load in a new value to the MAR
+    signal MARout: std_logic_vector(NumBits-1 downto 0); -- Data bus to output the current value of the MAR
     signal LoadEn: std_logic := '1'; -- Active low enable for loading in a new value to the MAR
     signal Clock: std_logic := '1'; -- Clock (triggered on rising edge)
     signal Reset: std_logic := '1'; -- Active low syncronous reset
-    signal Control: unsigned(33 downto 0) := (others => '0'); -- internal signal
+    signal Control: unsigned(NumBits+1 downto 0) := (others => '0'); -- internal signal
 begin
     MAR:
         entity work.LPU_MAR(arch)
@@ -75,7 +76,7 @@ begin
         end loop;
     end process TestInput;
     
-    MARin <= std_logic_vector(Control(33 downto 2));
+    MARin <= std_logic_vector(Control(NumBits+1 downto 2));
     Clock <= Control(0);
 
 end tb_arch;

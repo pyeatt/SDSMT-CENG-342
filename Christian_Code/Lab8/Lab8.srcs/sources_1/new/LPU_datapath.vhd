@@ -141,6 +141,9 @@ begin
 
     MDR:
         entity work.LPU_MDR(arch)
+        generic map(
+            NumBits => data_width
+            )
         port map(
             MDRin => B_bus,
             MDRout => Data_out,
@@ -151,6 +154,9 @@ begin
 
     MAR:
         entity work.LPU_MAR(arch)
+        generic map(
+            NumBits => data_width
+            )
         port map(
             MARin => D_bus,
             MARout => Address,

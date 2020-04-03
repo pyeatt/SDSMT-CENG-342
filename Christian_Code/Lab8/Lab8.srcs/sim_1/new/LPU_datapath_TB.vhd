@@ -43,6 +43,11 @@ architecture tb_arch of LPU_datapath_TB is
     signal Control: std_logic_vector(3 downto 0); -- ???
     signal Reset: std_logic := '1'; -- A `0' indicates that all registers should be set to zero. (Synchronous reset is preferred!)
     signal Clock: std_logic := '1'; -- Clock signal provided to all registers
+
+    -- test signals
+    signal MCRtestIn: unsigned(3 downto 0) := (others=>'0');--unsigned(to_signed(1,4));
+    signal MCRtestOut: unsigned(3 downto 0) := (others=>'0');
+    signal MCRisCorrect: std_logic := '0';
 begin
 
     LPU_datapath:
@@ -82,10 +87,10 @@ begin
         Reset <= '0';
         wait for 10 ns;
         Reset <= '1';
-        wait for 110 ns;
-        Reset <= '0';
-        wait for 10 ns;
-        Reset <= '1';
+--        wait for 110 ns;
+--        Reset <= '0';
+--        wait for 10 ns;
+--        Reset <= '1';
         wait;
     end process ResetTest;
     
@@ -98,6 +103,40 @@ begin
             Clock <= not Clock;
         end loop;
     end process ClockTest;
+    
+    
+    MCRTest: process
+    begin
+        loop
+            MCtrl <= std_logic_vector(MCRtestIn);
+            wait for 20 ns;
+            MCRle <= '0';
+            wait for 10 ns;
+            MCRle <= '1';
+            wait for 10 ns;
+            MCRtestIn <= MCRtestIn + 1;
+            wait for 10 ns;
+        end loop;
+    end process MCRTest;
+    
+--    MCRVerification: process
+--    begin
+--        MCRtestOut <= (others=>'0');
+--        wait for 10 ns;
+--        --loop
+--        MCRtestOut <= (others=>'0');
+--        wait for 10 ns;
+--        MCRtestOut <= unsigned(to_signed(1,4));
+--        wait for 10 ns;
+--        MCRtestIn <=unsigned(to_signed(2,4));
+--        wait for 10 ns;
+--        MCRtestIn <=unsigned(to_signed(2,4));
+--        wait for 10 ns;
+--    --end loop;
+--    end process MCRVerification;
+    
+--    MCRisCorrect <= '0' when MCRtestOut = unsigned(Control) else
+--                    '1';
 
 
 

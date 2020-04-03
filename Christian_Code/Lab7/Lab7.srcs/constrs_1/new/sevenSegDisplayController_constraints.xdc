@@ -4,7 +4,7 @@
 ## - rename the used ports (in each line, after get_ports) according to the top level signal names in the project
 
 ## Clock signal
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets wr_IBUF]
+#set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {clock}]
 set_property -dict {PACKAGE_PIN E3 IOSTANDARD LVCMOS33} [get_ports {clock}]
 create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports {clock}]
 
@@ -20,7 +20,7 @@ set_property -dict {PACKAGE_PIN T18 IOSTANDARD LVCMOS33} [get_ports {address[0]}
 set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports {address[1]}]
 set_property -dict {PACKAGE_PIN R13 IOSTANDARD LVCMOS33} [get_ports {address[2]}]
 set_property -dict {PACKAGE_PIN T8 IOSTANDARD LVCMOS18} [get_ports {en}]
-set_property -dict {PACKAGE_PIN U8 IOSTANDARD LVCMOS18} [get_ports {reset}]
+#set_property -dict {PACKAGE_PIN U8 IOSTANDARD LVCMOS18} [get_ports {reset}]
 #set_property -dict {PACKAGE_PIN R16 IOSTANDARD LVCMOS33} [get_ports {address[2]}]
 #set_property -dict {PACKAGE_PIN T13 IOSTANDARD LVCMOS33} [get_ports {en}]
 #set_property -dict {PACKAGE_PIN H6 IOSTANDARD LVCMOS33} [get_ports {reset}]
@@ -73,7 +73,7 @@ set_property -dict {PACKAGE_PIN K2 IOSTANDARD LVCMOS33} [get_ports {an[6]}]
 set_property -dict {PACKAGE_PIN U13 IOSTANDARD LVCMOS33} [get_ports {an[7]}]
 
 ##Buttons
-#set_property -dict {PACKAGE_PIN C12 IOSTANDARD LVCMOS33} [get_ports reset]
+set_property -dict {PACKAGE_PIN C12 IOSTANDARD LVCMOS33} [get_ports {reset}]
 set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports {wr}]
 #set_property -dict {PACKAGE_PIN M18 IOSTANDARD LVCMOS33} [get_ports {buttons[1]}]
 #set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS33} [get_ports {buttons[2]}]

@@ -2,10 +2,10 @@
 -- Author: Christian Weaver & Larry Pyeatt
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 03/30/2020
--- Lab 7
--- Design Name: genericMux5
--- Project Name: Lab7
+-- Date: 04/02/2020
+-- Lab 8
+-- Design Name: genericMux32Bit
+-- Project Name: Lab8
 ----------------------------------------------------------------------------------
 
 
@@ -29,18 +29,18 @@ use work.my_package.all;
 
 
 -- entity declaration for a generic 5-bit mux
-entity genericMux5 is
+entity genericMux32Bit is
     generic(sel_bits: integer := 1); -- number of selector bits
     port(
         sel: in std_logic_vector(sel_bits-1 downto 0); -- selector inputs
-        d_in: in slv_array_5(2**sel_bits-1 downto 0);
-        Y: out std_logic_vector(4 downto 0)
+        d_in: in slv_array_32(2**sel_bits-1 downto 0);
+        Y: out std_logic_vector(31 downto 0)
         );
-end genericMux5;
+end genericMux32Bit;
 
 
 -- implementation for a generic 5-bit mux using a process
-architecture proc_arch of genericMux5 is
+architecture proc_arch of genericMux32Bit is
 begin
     process(sel,d_in)
         variable sel_n: natural;

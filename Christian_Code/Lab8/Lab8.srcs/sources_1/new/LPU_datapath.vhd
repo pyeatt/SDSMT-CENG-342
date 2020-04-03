@@ -57,7 +57,6 @@ architecture arch of LPU_datapath is
     signal PC_out: std_logic_vector(data_width-1 downto 0); -- Data bus to carry output signal of PC
     signal CCR_in: std_logic_vector(3 downto 0); -- Data bus to carry input signal of CCR
     signal CCR_out: std_logic_vector(3 downto 0); -- Data bus to carry output signal of CCR
-    
 begin
 
     RegisterFile:
@@ -78,7 +77,7 @@ begin
                   Data_in;
                   
     ALU:
-        entity work.ALU(struct_arch)
+        entity work.genericALU(struct_arch)
         generic map(
             userWidth => data_width
             )

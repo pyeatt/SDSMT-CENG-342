@@ -27,13 +27,14 @@ architecture tb_arch of genericRegisterFile_testbench is
     signal outselect: std_logic_vector (1 downto 0):= "00";
     signal reset: std_logic := '1';
     signal din: std_logic_vector(4 downto 0);
-    signal clock,enable: std_logic := '1';
+    signal clock,writeEnable: std_logic := '1';
 begin
 
     uut: entity work.genericRegisterFile(struct_arch)
         generic map(n_sel=>2)
         port map(
-            en=>enable,
+            enable=>'0',
+            writeEnable=>writeEnable,
             clk=>clock,
             rst=>reset,
             dsel=>inselect,
@@ -73,10 +74,10 @@ begin
                 inselect <= std_logic_vector(to_unsigned(i,2));
                 din <= std_logic_vector(to_unsigned(dat,5));
                 dat := dat + 1;
-                enable <= '0';
-                wait for 10 ns;
-                enable <= '1';
-                wait for 10 ns;
+                writeEnable <= '0';
+                wait for 20 ns;
+                writeEnable <= '1';
+                wait for 20 ns;
             end loop;
             
             -- read data from the register file

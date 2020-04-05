@@ -47,7 +47,8 @@ begin
     regs: entity work.genericRegisterFile(struct_arch)
         generic map(n_sel=>adr_bits)
         port map(
-            en=>notWr,
+            enable=>en,
+            writeEnable=>notWr,
             clk=>clock,
             rst=>reset,
             dsel=>address,

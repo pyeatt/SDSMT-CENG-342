@@ -19,7 +19,8 @@ use work.my_package.all;
 entity genericRegisterFile is
 generic(n_sel: integer := 1); -- number of bits for selecting a register
     port(
-        en: in std_logic; -- active low enable
+        enable: in std_logic; -- active low chip enable
+        writeEnable: in std_logic; -- active low write enable
         clk: in std_logic; -- rising edge-triggered
         rst: in std_logic; -- active low asynchronous reset
         dsel: in std_logic_vector(n_sel-1 downto 0); -- input register select
@@ -32,14 +33,18 @@ end genericRegisterFile;
 
 -- implementation for a generic register file
 architecture struct_arch of genericRegisterFile is
-    signal enable: std_logic_vector(2**n_sel-1 downto 0);
+    signal internalEnable: std_logic_vector(2**n_sel-1 downto 0);
+    signal masterWriteEnable: std_logic;
     signal reg_data: slv_array_5(2**n_sel-1 downto 0);
 begin
+    -- only enable write when both chip enable and writeEnable are enabled (active low)
+    masterWriteEnable <= enable or writeEnable; -- only low when both enables are low
+    
     regs: for i in 0 to 2**n_sel -1 generate
         reg: entity work.genericRegister(ifelse_arch)
             generic map(bits=>5)
             port map(
-                en=>enable(i),
+                en=>internalEnable(i),
                 clk=>clk,
                 reset=>rst,
                 d=>d,
@@ -60,9 +65,9 @@ begin
     indec: entity work.genericDecoderWithEnable(ifelse_arch)
         generic map(bits=>n_sel)
         port map(
-            en=>en,
+            en=>masterWriteEnable,
             sel=>dsel,
-            y=>enable
+            y=>internalEnable
             );
     
 end struct_arch;

@@ -54,6 +54,7 @@ architecture tb_arch of LPU_RegisterFile_TB is
         READ
         );
     signal state: TEST_STATE := SETUP; -- This marks each quarter test period
+    signal dat: natural := 0; -- input data
 begin
 
     uut: entity work.LPU_RegisterFile(arch)
@@ -96,7 +97,7 @@ begin
     
     
     process
-        variable dat,i: natural := 0;
+        variable i: natural := 0;
     begin
         wait for 25 ns; -- wait until register setup complete
         loop
@@ -107,7 +108,7 @@ begin
             for i in 0 to 2**numSelBits-1 loop
                 Dsel <= std_logic_vector(to_unsigned(i,numSelBits));
                 Din <= std_logic_vector(to_unsigned(dat,dataWidth));
-                dat := dat + 1;
+                dat <= dat + 1;
                 wait for 20 ns;
             end loop;
             
@@ -127,7 +128,7 @@ begin
             for i in 0 to 2**numSelBits-1 loop
                 Dsel <= std_logic_vector(to_unsigned(i,numSelBits));
                 Din <= std_logic_vector(to_unsigned(dat,dataWidth));
-                dat := dat + 1;
+                dat <= dat + 1;
                 wait for 20 ns;
             end loop;
             

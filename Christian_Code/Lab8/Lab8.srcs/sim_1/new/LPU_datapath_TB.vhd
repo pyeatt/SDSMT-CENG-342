@@ -2,7 +2,7 @@
 -- Author: Christian Weaver & Larry Pyeatt
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 04/02/2020
+-- Date: 04/05/2020
 -- Lab 8
 -- Design Name: LPU_datapath_TB
 -- Project Name: Lab8
@@ -47,7 +47,29 @@ architecture tb_arch of LPU_datapath_TB is
     -- test signals
     signal MCRtestIn: unsigned(3 downto 0) := (others=>'0');--unsigned(to_signed(1,4));
     signal MDRtestIn: unsigned(data_width-1 downto 0) := (others=>'0');--unsigned(to_signed(1,4));
-
+    type TEST_STATE is (
+        SETUP,
+        SUCC_WRITE_RF,
+        SUCC_READ_A_RF,
+        SUCC_READ_B_RF,
+        ALU_ADD,
+        ALU_ADC,
+        ALU_SUB,
+        ALU_SBC,
+        ALU_NOT,
+        ALU_AND,
+        ALU_OR,
+        ALU_XOR,
+        ALU_B,
+        ALU_LSL,
+        ALU_LSR,
+        ALU_ASR,        
+        FAIL_WRITE,
+        READ
+        );
+    signal state: TEST_STATE := SETUP; -- This marks each quarter test period
+    signal dat: natural := 0; -- input data
+    signal immeadiate: integer := 4; -- constant for ALU operations
 --    signal MCRtestOut: unsigned(3 downto 0) := (others=>'0');
 --    signal MCRisCorrect: std_logic := '0';
 begin
@@ -83,20 +105,6 @@ begin
              Clock => Clock
              );
 
-    ResetTest: process
-    begin
-        Reset <= '1';
-        wait for 10 ns;
-        Reset <= '0';
-        wait for 10 ns;
-        Reset <= '1';
---        wait for 110 ns;
---        Reset <= '0';
---        wait for 10 ns;
---        Reset <= '1';
-        wait;
-    end process ResetTest;
-
 
     ClockTest: process
     begin
@@ -108,98 +116,133 @@ begin
             Clock <= not Clock;
         end loop;
     end process ClockTest;
-    
-    
-    -- load values 0 through 7 into registers 0 through 7
-    LoadRegisterFile: process
+   
+   
+   test: process
     begin
-        wait for 20 ns;
-        DIsel <= '1';
-        Dlen <= '0';
-        for i in 0 to 7 loop
-            Dsel <= std_logic_vector(to_unsigned(i, 3));
-            Data_in <= std_logic_vector(to_unsigned(i, data_width));
-            wait for 20 ns;
-        end loop;
-        DIsel <= '0';
+        -- clear the MAR
+        state <= SETUP;
+        Reset <= '1';
         Dlen <= '1';
-        wait;
-    end process LoadRegisterFile;
-    
-    
-    -- every 160 ns read registers 0 through 7 to B bus
-    ReadRegisterFileB: process
-    begin
-        wait for 180 ns; -- wait for register file to be filled
-        for i in 0 to 7 loop
-            Bsel <= std_logic_vector(to_unsigned(i, 3));
-            wait for 20 ns;
-        end loop;
-    end process ReadRegisterFileB;
-    
-    
-    -- every 160 ns read registers 0 through 7 to A bus
-    ReadRegisterFileA: process
-    begin
-        wait for 180 ns; -- wait for register file to be filled
-        for i in 0 to 7 loop
-            Asel <= std_logic_vector(to_unsigned(i, 3));
-            wait for 20 ns;
-        end loop;
-    end process ReadRegisterFileA;
-    
-    
-    -- route the B bus to the LPU output
-    MCRTest: process
-    begin
+        PCle <= '1';
+        PCie <= '1';
+        PCDsel <= '1';
+        PCAsel <= '1';
+        IMMBsel <= '1';
+        CCRle <= '1';
+        MARle <= '1';
+        MCRle <= '1';
+        wait for 10 ns;
+        Reset <= '0';
+        wait for 15 ns;
+        Reset <= '1';
+        
         loop
-            MCtrl <= std_logic_vector(MCRtestIn);
-            wait for 20 ns;
-            MCRle <= '0';
-            wait for 10 ns;
-            MCRle <= '1';
-            wait for 10 ns;
-            MCRtestIn <= MCRtestIn + 1;
-            wait for 10 ns;
+            
+            -- load values into registers 0 through 3
+            state <= SUCC_WRITE_RF;
+            DIsel <= '1';
+            Dlen <= '0';
+            dat <= dat + 1;
+            for i in 0 to 3 loop
+                Dsel <= std_logic_vector(to_unsigned(i, 3));
+                Data_in <= std_logic_vector(to_unsigned(dat, data_width));
+                wait for 20 ns;
+                dat <= dat + 1;
+            end loop;
+            
+            -- route registers 0 through 3 to B bus
+            state <= SUCC_READ_B_RF;
+            MARle <= '0'; -- enable B bus to be outputted to 'Data_out'
+            for i in 0 to 3 loop
+                Bsel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            
+            -- test ALU
+            CCRle <= '1'; -- enable the CCR
+            PCDsel <= '0'; -- route ALU output to D bus
+            PCAsel <= '0'; -- route A bus to ALU
+            IMMBsel <= '1'; -- route 'IMM" to ALU
+            IMM <= std_logic_vector(to_unsigned(immeadiate, data_width)); -- 4 is a constant for calculations
+            state <= ALU_ADD;
+            ALUfunc <= "0000";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_ADC;
+            ALUfunc <= "0010";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_SUB;
+            ALUfunc <= "0100";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_SBC;
+            ALUfunc <= "0110";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_NOT;
+            ALUfunc <= "1001";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_AND;
+            ALUfunc <= "1011";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_OR;
+            ALUfunc <= "1101";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_XOR;
+            ALUfunc <= "1111";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_B;
+            ALUfunc <= "1000";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_LSL;
+            ALUfunc <= "1010";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_LSR;
+            ALUfunc <= "1100";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+            state <= ALU_ASR;
+            ALUfunc <= "1110";
+            for i in 0 to 3 loop
+                Asel <= std_logic_vector(to_unsigned(i, 3));
+                wait for 20 ns;
+            end loop;
+
+            
+
+        
         end loop;
-    end process MCRTest;
-    
-    
-    ALUTest: process
-    begin
-        CCRle <= '0'; -- enable the CCR
-        PCDsel <= '0'; -- route ALU output to D bus
-        PCAsel <= '0'; -- route A bus to ALU
-        IMMBsel <= '0'; -- rout B bus to ALU
-        wait for 180 ns; -- wait for register file to be filled
-        for i in 0 to 7 loop
-            ALUfunc <= "0000"; -- this sets the ALU function
-            wait for 20 ns;
-        end loop;
-        wait;
-    end process ALUTest;
-
-
-    MDRandMARTest: process
-    begin
-        wait for 180 ns; -- wait for the register file to be filled
-        MARle <= '0'; -- enable the MDR
-        loop
-            MARle <= not MARle; -- toggle the enable on the MDR and MAR
-            wait for 160 ns; -- wait for the next read cycle for the B bus
-        end loop;
-    end process MDRandMARTest;
-    
-    
-    PC_test: process
-    begin
-        PCie <= '0'; -- enable PC counter
-        PCDsel <= '0'; -- rout PC output to D bus
-        wait for 180 ns;
-    end process PC_test;
-
-
-
+    end process test;
 end tb_arch;
 
 

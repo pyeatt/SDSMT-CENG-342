@@ -63,7 +63,8 @@ architecture tb_arch of LPU_datapath_TB is
         ALU_B,
         ALU_LSL,
         ALU_LSR,
-        ALU_ASR,        
+        ALU_ASR, 
+        LOAD_PC,       
         FAIL_WRITE,
         READ
         );
@@ -160,7 +161,7 @@ begin
             end loop;
             
             -- test ALU
-            CCRle <= '1'; -- enable the CCR
+            CCRle <= '0'; -- enable the CCR
             PCDsel <= '0'; -- route ALU output to D bus
             PCAsel <= '0'; -- route A bus to ALU
             IMMBsel <= '1'; -- route 'IMM" to ALU
@@ -238,9 +239,19 @@ begin
                 wait for 20 ns;
             end loop;
 
-            
 
-        
+            -- add zero from A bus to IMM, store resutl in PC and output to result
+            state <= LOAD_PC;
+            IMMBsel <= '1'; -- route IMM to ALU
+            PCAsel <= '0'; -- route A bus into ALU
+            PCle <= '0'; -- enable PC load
+            PCie <= '1'; -- diable PC increment
+            PCDsel <= '1'; -- route PC to D bus
+            ALUfunc <= "0000"; -- set ALU to ADD
+            IMM <= std_logic_vector(to_unsigned(1, data_width)); -- set IMM to 'dat'
+            Asel <= std_logic_vector(to_unsigned(0, 3)); -- set A bus to 0
+            wait for 40 ns;
+            
         end loop;
     end process test;
 end tb_arch;

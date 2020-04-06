@@ -20,7 +20,7 @@ end LPU_PC_TB;
 
 
 -- implementation of a testbench for a generic counter
--- Test period: 4*10*(2**numSelBits) ns
+-- Test period: 4*10*(2**NumBits) ns
 -- Setup time: 20 ns
 architecture tb_arch of LPU_PC_TB is
     constant NumBits: integer := 3; -- Number of bits in the counter

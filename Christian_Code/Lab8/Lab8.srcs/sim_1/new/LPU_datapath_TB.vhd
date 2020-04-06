@@ -44,9 +44,6 @@ architecture tb_arch of LPU_datapath_TB is
     signal Reset: std_logic; -- A `0' indicates that all registers should be set to zero. (Synchronous reset is preferred!)
     signal Clock: std_logic; -- Clock signal provided to all registers
 
-    -- test signals
-    signal MCRtestIn: unsigned(3 downto 0) := (others=>'0');--unsigned(to_signed(1,4));
-    signal MDRtestIn: unsigned(data_width-1 downto 0) := (others=>'0');--unsigned(to_signed(1,4));
     type TEST_STATE is (
         SETUP,
         SUCC_WRITE_RF,
@@ -64,15 +61,14 @@ architecture tb_arch of LPU_datapath_TB is
         ALU_LSL,
         ALU_LSR,
         ALU_ASR, 
-        LOAD_PC,       
+        LOAD_PC,    
+        STORE_RESULT,   
         FAIL_WRITE,
         READ
         );
     signal state: TEST_STATE := SETUP; -- This marks each quarter test period
     signal dat: natural := 0; -- input data
     signal immeadiate: integer := 4; -- constant for ALU operations
---    signal MCRtestOut: unsigned(3 downto 0) := (others=>'0');
---    signal MCRisCorrect: std_logic := '0';
 begin
 
     LPU_datapath:
@@ -239,8 +235,7 @@ begin
                 wait for 20 ns;
             end loop;
 
-
-            -- add zero from A bus to IMM, store resutl in PC and output to result
+            -- add zero from A bus to IMM, store resut in PC and output to address
             state <= LOAD_PC;
             IMMBsel <= '1'; -- route IMM to ALU
             PCAsel <= '0'; -- route A bus into ALU
@@ -248,9 +243,35 @@ begin
             PCie <= '1'; -- diable PC increment
             PCDsel <= '1'; -- route PC to D bus
             ALUfunc <= "0000"; -- set ALU to ADD
-            IMM <= std_logic_vector(to_unsigned(1, data_width)); -- set IMM to 'dat'
+            IMM <= std_logic_vector(to_unsigned(1, data_width)); -- set IMM to 1
             Asel <= std_logic_vector(to_unsigned(0, 3)); -- set A bus to 0
             wait for 40 ns;
+            
+            -- load in 2 to register 0 and 3 to register 1
+            -- route register 0 to A bus and register 1 to B bus
+            -- add the two together
+            -- store the result in register 3
+            -- route register 3 through the B bus to 'Data_out'
+            state <= STORE_RESULT;
+            DIsel <= '1'; -- route 'Data_in' into register file
+            Dsel <= std_logic_vector(to_unsigned(0, 3)); -- route 'Data_in' to register 0
+            Data_in <= std_logic_vector(to_unsigned(2, data_width));
+            wait for 20 ns;
+            Dsel <= std_logic_vector(to_unsigned(1, 3)); -- route 'Data_in' to register 1
+            Data_in <= std_logic_vector(to_unsigned(3, data_width));
+            wait for 20 ns;
+            Asel <= std_logic_vector(to_unsigned(0, 3)); -- route register 0 to A bus
+            Bsel <= std_logic_vector(to_unsigned(1, 3)); -- route register 1 to B bus
+            PCAsel <= '0'; -- route A bus to ALU
+            IMMBsel <= '0'; -- route B  bus to ALU
+            ALUfunc <= "0000"; -- set ALU to ADD
+            PCDsel <= '0'; -- route ALU output to D bus
+            DIsel <= '0'; -- route D bus to register file
+            Dsel <= std_logic_vector(to_unsigned(3, 3)); -- route D bus to register 3
+            wait for 20 ns;
+            Bsel <= std_logic_vector(to_unsigned(3, 3)); -- route register 3 to B bus
+            wait for 20 ns;            
+            
             
         end loop;
     end process test;

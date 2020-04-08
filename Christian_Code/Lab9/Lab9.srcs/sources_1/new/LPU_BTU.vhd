@@ -26,7 +26,6 @@ entity LPU_BTU is
 end LPU_BTU;
 
 architecture behavioral of LPU_BTU is
-
     signal branchInternal: std_logic_vector(14 downto 0);
 begin
     with condition select

@@ -2,7 +2,7 @@
 -- Author: Christian Weaver
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 04/07/2020
+-- Date: 04/09/2020
 -- Lab 9
 -- Design Name: LPU_BTU
 -- Project Name: Lab9
@@ -40,7 +40,7 @@ begin
             V when "0111", -- vs
             not V when "1000", -- vc
             N xor V when "1001", -- lt
-            ((not Z) and (N or V)) or ((not N) and V) when "1010", -- gt
+            (not Z) and ((N and V) or ((not N) and (not V))) when "1010", -- gt
             Z or (N xor V) when "1011", -- le
             (N and V) or ((not N) and (not V)) when "1100", -- ge
             Co and (not Z) when "1101", -- hi

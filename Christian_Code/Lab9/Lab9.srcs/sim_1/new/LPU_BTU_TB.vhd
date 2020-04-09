@@ -2,7 +2,7 @@
 -- Author: Christian Weaver
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 04/07/2020
+-- Date: 04/08/2020
 -- Lab 9
 -- Design Name: LPU_BTU_TB
 -- Project Name: Lab9
@@ -27,7 +27,7 @@ architecture tb_arch of LPU_BTU_TB is
     signal branch: std_logic; -- this flag determines if a branch should be taken
     signal minTerm: integer := 0; -- keeps track of the minterms
     -- 'corectValues' is a list of the output of the truth table with the MSB being minterm 0 and LSB being minterm 255
-    signal correctValues: std_logic_vector(0 to 255) := "1111111111111111000000001111111111111111000000000000111100001111111100001111000000110011001100111100110011001100010101010101010110101010101010100101010110101010101000000101000001011111101011111010101001010101001100000011000011111100111111000000000000000000";
+    signal correctValues: std_logic_vector(0 to 255) := "1111111111111111000000001111111111111111000000000000111100001111111100001111000000110011001100111100110011001100010101010101010110101010101010100101010110101010101000000101000001011111101011111010101001010101001100000011000011001111110011110000000000000000";
     signal correctValue: std_logic := '0'; -- stores a value from 'correctValues'
     signal isCorrect: std_logic := '0'; -- flag that indicates the correctness of the circuit (1: correct, 0: incorrect)
 begin

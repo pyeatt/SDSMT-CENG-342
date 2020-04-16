@@ -17,7 +17,7 @@ use work.instructionDecoderPKG.all;
 entity LPU_instructionDecoder is
     port(
         I : in std_logic_vector(15 downto 0); -- instruction to decode
-        take_branch: in std_logic_vector(3 downto 0); -- input from BTU
+        take_branch: in std_logic; -- input from BTU (0->no branch; 1->branch)
         T : out instruction_t; -- instruction type
         imm: out std_logic_vector(31 downto 0); -- immediate data field
         Asel: out std_logic_vector(2 downto 0); -- select for register A
@@ -137,8 +137,137 @@ begin
         'X' when T_internal = HCF else -- HCF
         'X' when T_internal = ILLEGAL; -- ILLEGAL
 
+    control(Dlen) <= '1' when T_internal = CMPR else -- CMPR
+        '1' when T_internal = CMPI else -- CMPI
+        '0' when T_internal = RR else -- RR
+        '0' when T_internal = RRR else -- RRR
+        '0' when T_internal = RI else -- RI
+        '0' when T_internal = RRI else -- RRI
+        '0' when T_internal = PCRL else -- PCRL
+        '0' when T_internal = LOAD else -- LOAD
+        '1' when T_internal = STORE else -- STORE
+        (not take_branch) or I(11) when T_internal = BR else -- BR
+        (not take_branch) or I(11) when T_internal = BPCR else -- BPCR
+        'X' when T_internal = HCF else -- HCF
+        'X' when T_internal = ILLEGAL; -- ILLEGAL
 
+    control(PCAsel) <= '0' when T_internal = CMPR else -- CMPR
+        '0' when T_internal = CMPI else -- CMPI
+        '0' when T_internal = RR else -- RR
+        '0' when T_internal = RRR else -- RRR
+        '0' when T_internal = RI else -- RI
+        '0' when T_internal = RRI else -- RRI
+        '1' when T_internal = PCRL else -- PCRL
+        I(5) and I(4) and I(3) when T_internal = LOAD else -- LOAD
+        '0' when T_internal = STORE else -- STORE
+        '0' when T_internal = BR else -- BR
+        '1' when T_internal = BPCR else -- BPCR
+        'X' when T_internal = HCF else -- HCF
+        'X' when T_internal = ILLEGAL; -- ILLEGAL
 
+    control(PCle) <= '1' when T_internal = CMPR else -- CMPR
+        '1' when T_internal = CMPI else -- CMPI
+        '1' when T_internal = RR else -- RR
+        '1' when T_internal = RRR else -- RRR
+        '1' when T_internal = RI else -- RI
+        '1' when T_internal = RRI else -- RRI
+        '1' when T_internal = PCRL else -- PCRL
+        '1' when T_internal = LOAD else -- LOAD
+        '1' when T_internal = STORE else -- STORE
+        (not take_branch) when T_internal = BR else -- BR
+        (not take_branch) when T_internal = BPCR else -- BPCR
+        'X' when T_internal = HCF else -- HCF
+        'X' when T_internal = ILLEGAL; -- ILLEGAL
+
+    control(PCie) <= '1' when T_internal = CMPR else -- CMPR
+        '1' when T_internal = CMPI else -- CMPI
+        '1' when T_internal = RR else -- RR
+        '1' when T_internal = RRR else -- RRR
+        '1' when T_internal = RI else -- RI
+        '1' when T_internal = RRI else -- RRI
+        '1' when T_internal = PCRL else -- PCRL
+        '1' when T_internal = LOAD else -- LOAD
+        '1' when T_internal = STORE else -- STORE
+        '1' when T_internal = BR else -- BR
+        '1' when T_internal = BPCR else -- BPCR
+        'X' when T_internal = HCF else -- HCF
+        'X' when T_internal = ILLEGAL; -- ILLEGAL
+
+    control(PCDsel) <= 'X' when T_internal = CMPR else -- CMPR
+        'X' when T_internal = CMPI else -- CMPI
+        '0' when T_internal = RR else -- RR
+        '0' when T_internal = RRR else -- RRR
+        '0' when T_internal = RI else -- RI
+        '0' when T_internal = RRI else -- RRI
+        '0' when T_internal = PCRL else -- PCRL
+        '0' when T_internal = LOAD else -- LOAD
+        '0' when T_internal = STORE else -- STORE
+        '1' when T_internal = BR else -- BR
+        '1' when T_internal = BPCR else -- BPCR
+        'X' when T_internal = HCF else -- HCF
+        'X' when T_internal = ILLEGAL; -- ILLEGAL
+        
+    control(IMMBsel) <= '0' when T_internal = CMPR else -- CMPR
+        '1' when T_internal = CMPI else -- CMPI
+        '0' when T_internal = RR else -- RR
+        '0' when T_internal = RRR else -- RRR
+        '1' when T_internal = RI else -- RI
+        '1' when T_internal = RRI else -- RRI
+        '1' when T_internal = PCRL else -- PCRL
+        '1' when T_internal = LOAD else -- LOAD
+        '1' when T_internal = STORE else -- STORE
+        '1' when T_internal = BR else -- BR
+        '1' when T_internal = BPCR else -- BPCR
+        'X' when T_internal = HCF else -- HCF
+        'X' when T_internal = ILLEGAL; -- ILLEGAL
+
+    control(CCRle) <= '0' when T_internal = CMPR else -- CMPR
+        '0' when T_internal = CMPI else -- CMPI
+        '0' when T_internal = RR else -- RR
+        '0' when T_internal = RRR else -- RRR
+        '0' when T_internal = RI else -- RI
+        '0' when T_internal = RRI else -- RRI
+        '1' when T_internal = PCRL else -- PCRL
+        '1' when T_internal = LOAD else -- LOAD
+        '1' when T_internal = STORE else -- STORE
+        '1' when T_internal = BR else -- BR
+        '1' when T_internal = BPCR else -- BPCR
+        'X' when T_internal = HCF else -- HCF
+        'X' when T_internal = ILLEGAL; -- ILLEGAL
+
+    control(MARle) <= '1' when T_internal = CMPR else -- CMPR
+        '1' when T_internal = CMPI else -- CMPI
+        '1' when T_internal = RR else -- RR
+        '1' when T_internal = RRR else -- RRR
+        '1' when T_internal = RI else -- RI
+        '1' when T_internal = RRI else -- RRI
+        '0' when T_internal = PCRL else -- PCRL
+        '0' when T_internal = LOAD else -- LOAD
+        '0' when T_internal = STORE else -- STORE
+        '1' when T_internal = BR else -- BR
+        '1' when T_internal = BPCR else -- BPCR
+        'X' when T_internal = HCF else -- HCF
+        'X' when T_internal = ILLEGAL; -- ILLEGAL
+
+    control(MCRle) <= 'X' when T_internal = CMPR else -- CMPR
+        '1' when T_internal = CMPI else -- CMPI
+        '1' when T_internal = RR else -- RR
+        '1' when T_internal = RRR else -- RRR
+        '1' when T_internal = RI else -- RI
+        '1' when T_internal = RRI else -- RRI
+        '1' when T_internal = PCRL else -- PCRL
+        '1' when T_internal = LOAD else -- LOAD
+        '1' when T_internal = STORE else -- STORE
+        '1' when T_internal = BR else -- BR
+        '1' when T_internal = BPCR else -- BPCR
+        'X' when T_internal = HCF else -- HCF
+        'X' when T_internal = ILLEGAL; -- ILLEGAL
+
+    control(membyte) <= I(7) or I(6) when T_internal = LOAD or T_internal = STORE else
+        '1';
+    
+    control(memhalf) <= I(7) or (not I(6)) when T_internal = LOAD or T_internal = STORE else
+        '1';
 end arch;
 
 

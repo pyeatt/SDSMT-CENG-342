@@ -19,7 +19,7 @@ end LPU_instructionDecoder_TB;
 
 architecture tb_arch of LPU_instructionDecoder_TB is
     signal I : std_logic_vector(15 downto 0); -- instruction to decode
-    signal take_branch: std_logic_vector(3 downto 0); -- input from BTU
+    signal take_branch: std_logic; -- input from BTU (0->no branch; 1->branch)
     signal T : instruction_t; -- instruction type
     signal imm: std_logic_vector(31 downto 0); -- immediate data field
     signal Asel: std_logic_vector(2 downto 0); -- select for register A
@@ -45,9 +45,9 @@ begin
             
     process
     begin
-        for j in 0 to 2**20-1 loop
-            I <= std_logic_vector(to_unsigned(j, 20)(19 downto 4));
-            take_branch <= std_logic_vector(to_unsigned(j, 20)(3 downto 0));
+        for j in 0 to 2**17-1 loop
+            I <= std_logic_vector(to_unsigned(j, 17)(16 downto 1));
+            take_branch <= std_logic(to_unsigned(j, 17)(0));
             
             wait for 20 ns;
         end loop;

@@ -14,6 +14,12 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 package instructionDecoderPKG is
+
+type CCR_t is (N, Z, Co, V);
+
+-- holds CCR flag data
+type CCR_t_array is array (CCR_t) of std_logic;
+
 type instruction_t is (CMPR, CMPI, RR, RRR, RI, RRI,
 PCRL, LOAD, STORE, BR, BPCR, HCF, ILLEGAL);
 

@@ -2,12 +2,12 @@
 -- Author: Christian Weaver
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 04/14/2020
+-- Date: 04/16/2020
 -- Lab 10
 -- Design Name: LPU_instructionDecoder
 -- Project Name: Lab10
 ----------------------------------------------------------------------------------
-
+-- run time: 521 ns
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -15,7 +15,9 @@ use ieee.numeric_std.all;
 use work.instructionDecoderPKG.all;
 
 package instructionDecoderTestPKG is
-        type tests_t is(
+
+    -- this acts as indexes for each test case
+    type tests_t is(
         CMPR1,
         CMPR2,
         CMPI1,
@@ -44,8 +46,10 @@ package instructionDecoderTestPKG is
         ILLEGAL2
         );
 
+    -- this stores the instructions to be tested and is indexed by the test name
     type tests_t_array is array (tests_t) of std_logic_vector(15 downto 0);
     
+    -- this stores expected test results
     type outputs_t is
         record
             T: instruction_t;
@@ -69,8 +73,10 @@ package instructionDecoderTestPKG is
             CLKen: std_logic;
         end record;
     
+    -- this stores expected test results for all the tests and is indexed by the test name
     type outputs_t_array is array(tests_t) of outputs_t;
     
+    -- this verifys the expected with the actual results
     function CheckAnswer(
         T: instruction_t;
         imm: std_logic_vector(31 downto 0);
@@ -97,29 +103,27 @@ package body instructionDecoderTestPKG is
         outputs: outputs_t
         ) return std_logic is
     begin
-        if T = outputs.T and imm = outputs.imm then 
-            --Asel = outputs.Asel and Bsel = outputs.Bsel and 
-            --Dsel = outputs.Dsel and ALUfunc = outputs.ALUfunc then
---            control(DIsel) = outputs.DIsel and 
---            control(immBsel) = outputs.immBsel and
---            control(PCDsel) = outputs.PCDsel and
---            control(PCAsel) = outputs.PCAsel and
---            control(PCle) = outputs.PCle and
---            control(PCie) = outputs.PCie and
---            control(Dlen) = outputs.Dlen and
---            control(CCRle) = outputs.CCRle and
---            control(MARle) = outputs.MARle and
---            control(MCRle) = outputs.MCRle and
---            control(membyte) = outputs.Byte and
---            control(memhalf) = outputs.Halfword and 
---            control(clken) = outputs.CLKen then
+        if T = outputs.T and imm = outputs.imm and 
+            Asel = outputs.Asel and Bsel = outputs.Bsel and 
+            Dsel = outputs.Dsel and ALUfunc = outputs.ALUfunc and
+            control(DIsel) = outputs.DIsel and
+            control(immBsel) = outputs.immBsel and
+            control(PCDsel) = outputs.PCDsel and
+            control(PCAsel) = outputs.PCAsel and
+            control(PCle) = outputs.PCle and
+            control(PCie) = outputs.PCie and
+            control(Dlen) = outputs.Dlen and
+            control(CCRle) = outputs.CCRle and
+            control(MARle) = outputs.MARle and
+            control(MCRle) = outputs.MCRle and
+            control(membyte) = outputs.Byte and
+            control(memhalf) = outputs.Halfword and 
+            control(clken) = outputs.CLKen then
             return '1';
         else
             return '0';
         end if;
-    
     end CheckAnswer;
-
 end package body instructionDecoderTestPKG;
 
 
@@ -143,14 +147,14 @@ architecture tb_arch of LPU_instructionDecoder_TB is
     signal ALUfunc: std_logic_vector(3 downto 0); -- function for ALU
     signal control: control_t_array := (others=>'0'); -- Mux and register enable signals
 
-    signal curTest: tests_t;
-    signal instructions: tests_t_array;
-    signal outputs: outputs_t_array;
+    signal curTest: tests_t; -- this displays the current test being run in the waveform
+    signal instructions: tests_t_array; -- store the instructions to test
+    signal outputs: outputs_t_array; -- stores teh correct output for each instruction
     
-    signal isCorrect: std_logic := '0';
+    signal isCorrect: std_logic := '0'; -- 1->correct; 0->incorrect
 
 begin
-    -- fill instruction array
+    -- fill instruction array with test instructions
     instructions(CMPR1) <= "1000011000101010";
     instructions(CMPR2) <= "1000011000111000";
     instructions(CMPI1) <= "1001111100000111";
@@ -178,7 +182,7 @@ begin
     instructions(ILLEGAL1) <= "1110000000011000";
     instructions(ILLEGAL2) <= "1110000000001000";
     
-    -- fill outputs array
+    -- fill outputs array with expected results
     outputs(CMPR1) <= (
         T => CMPR,
         Asel => "010",
@@ -205,7 +209,7 @@ begin
         Asel => "000",
         Bsel => "111",
         Dsel => "111",
-        IMM => "0000000011000000",
+        IMM => (others=>'1'),
         ALUfunc => "0100",
         DIsel => '1',
         Dlen => '1',
@@ -224,9 +228,9 @@ begin
     outputs(CMPI1) <= (
         T => CMPI,
         Asel => "111",
-        Bsel => "11",
+        Bsel => "111",
         Dsel => "111",
-        IMM => "0000000001100000",
+        IMM => "00000000000000000000000001100000",
         ALUfunc => "0100",
         DIsel => '1',
         Dlen => '1',
@@ -234,7 +238,7 @@ begin
         PCle => '1',
         PCie => '1',
         PCDsel => '1',
-        IMMBsel => '0',
+        IMMBsel => '1',
         CCRle => '0',
         MARle => '1',
         MCRle => '1',
@@ -247,7 +251,7 @@ begin
         Asel => "101",
         Bsel => "111",
         Dsel => "111",
-        IMM => "0000000001000000",
+        IMM => "00000000000000000000000001000000",
         ALUfunc => "0100",
         DIsel => '1',
         Dlen => '1',
@@ -332,7 +336,7 @@ begin
         Bsel => "101",
         Dsel => "101",
         IMM => (others=>'1'),
-        ALUfunc => "0110",
+        ALUfunc => "1111",
         DIsel => '0',
         Dlen => '0',
         PCAsel => '0',
@@ -352,7 +356,7 @@ begin
         Asel => "000",
         Bsel => "111",
         Dsel => "000",
-        IMM => "0000000011111111",
+        IMM => "00000000000000000000000011111111",
         ALUfunc => "1101",
         DIsel => '0',
         Dlen => '0',
@@ -373,7 +377,7 @@ begin
         Asel => "010",
         Bsel => "111",
         Dsel => "010",
-        IMM => "0000000011111111",
+        IMM => "00000000000000000000000011111111",
         ALUfunc => "1000",
         DIsel => '0',
         Dlen => '0',
@@ -415,7 +419,7 @@ begin
         Asel => "000",
         Bsel => "111",
         Dsel => "111",
-        IMM => "0000000000011111",
+        IMM => "00000000000000000000000000011111",
         ALUfunc => "0000",
         DIsel => '0',
         Dlen => '0',
@@ -436,7 +440,7 @@ begin
         Asel => "111",
         Bsel => "111",
         Dsel => "000",
-        IMM => "0000000000011110",
+        IMM => "00000000000000000000000000011110",
         ALUfunc => "0000",
         DIsel => '1',
         Dlen => '0',
@@ -457,7 +461,7 @@ begin
         Asel => "111",
         Bsel => "111",
         Dsel => "001",
-        IMM => "0000000111111110",
+        IMM => "00000000000000000000000111111110",
         ALUfunc => "0000",
         DIsel => '1',
         Dlen => '0',
@@ -478,7 +482,7 @@ begin
         Asel => "000",
         Bsel => "111",
         Dsel => "101",
-        IMM => "0000000000111111",
+        IMM => "00000000000000000000000000111111",
         ALUfunc => "0000",
         DIsel => '1',
         Dlen => '0',
@@ -520,8 +524,8 @@ begin
         Asel => "000",
         Bsel => "101",
         Dsel => "111",
-        IMM => "0000000000111111",
-        ALUfunc => "0001",
+        IMM => "00000000000000000000000000111111",
+        ALUfunc => "0000",
         DIsel => '1',
         Dlen => '1',
         PCAsel => '0',
@@ -541,7 +545,7 @@ begin
         Asel => "001",
         Bsel => "001",
         Dsel => "111",
-        IMM => "0000000000000100",
+        IMM => "00000000000000000000000000000100",
         ALUfunc => "0000",
         DIsel => '1',
         Dlen => '1',
@@ -559,14 +563,14 @@ begin
         );
     outputs(BR1) <= (
         T => BR,
-        Asel => "001",
+        Asel => "110",
         Bsel => "111",
-        Dsel => "110",
+        Dsel => "111",
         IMM => (others=>'0'),
         ALUfunc => "0000",
         DIsel => '0',
         Dlen => '1',
-        PCAsel => '1',
+        PCAsel => '0',
         PCle => '1',
         PCie => '1',
         PCDsel => '1',
@@ -603,12 +607,12 @@ begin
         T => BPCR,
         Asel => "111",
         Bsel => "111",
-        Dsel => "110",
-        IMM => "0000000001111110",
+        Dsel => "111",
+        IMM => "00000000000000000000000011111110",
         ALUfunc => "0000",
         DIsel => '0',
         Dlen => '1',
-        PCAsel => '0',
+        PCAsel => '1',
         PCle => '0',
         PCie => '1',
         PCDsel => '1',
@@ -746,13 +750,17 @@ begin
      CCRflags(Co) <= '0';
      CCRflags(V) <= '1';       
             
-    process
+    test: process
     begin
-        wait for 1 ns;
+        wait for 1 ns; -- ensure the instructions and results are loaded
+        
+        -- generate results
         for j in instructions'left to instructions'right loop
             I <= instructions(j);
-            curTest <= j;
+            curTest <= j; -- display which test is being run in the waveform
             wait for 1 ns;
+            
+            -- verify results
             isCorrect <= CheckAnswer(
                 T,
                 imm,
@@ -765,7 +773,5 @@ begin
                 );
             wait for 19 ns;
         end loop;
-    
-    end process;
-
+    end process test;
 end tb_arch;

@@ -2,7 +2,7 @@
 -- Author: Christian Weaver
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 04/14/2020
+-- Date: 04/16/2020
 -- Lab 10
 -- Design Name: LPU_instructionDecoder
 -- Project Name: Lab10
@@ -13,6 +13,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.instructionDecoderPKG.all;
+
 
 entity LPU_instructionDecoder is
     port(
@@ -113,9 +114,9 @@ begin
         "00000000000000000000000000" & I(13 downto 8) when T_internal = LOAD and I(7 downto 6) = "00" else -- LOAD (sz = "00")
         "0000000000000000000000000" & I(13 downto 8) & '0' when T_internal = LOAD and I(7 downto 6) = "01" else -- LOAD (sz = "01")
         "000000000000000000000000" & I(13 downto 8) & "00" when T_internal = LOAD and I(7 downto 6) = "10" else -- LOAD (sz = "10")
-        "00000000000000000000000000" & I(13 downto 8) when T_internal = LOAD and I(7 downto 6) = "00" else -- STORE (sz = "00")
-        "0000000000000000000000000" & I(13 downto 8) & '0' when T_internal = LOAD and I(7 downto 6) = "01" else -- STORE (sz = "01")
-        "000000000000000000000000" & I(13 downto 8) & "00" when T_internal = LOAD and I(7 downto 6) = "10" else -- STORE (sz = "10")
+        "00000000000000000000000000" & I(13 downto 8) when T_internal = STORE and I(7 downto 6) = "00" else -- STORE (sz = "00")
+        "0000000000000000000000000" & I(13 downto 8) & '0' when T_internal = STORE and I(7 downto 6) = "01" else -- STORE (sz = "01")
+        "000000000000000000000000" & I(13 downto 8) & "00" when T_internal = STORE and I(7 downto 6) = "10" else -- STORE (sz = "10")
         (others=>'0') when T_internal = BR else -- BR
         "000000000000000000000000" & I(6 downto 0) & '0' when T_internal = BPCR else -- BPCR
         (others=>'1') when T_internal = HCF else -- HCF
@@ -123,7 +124,7 @@ begin
 
     ALUfunc <= "0100" when T_internal = CMPR else -- CMPR
         "0100" when T_internal = CMPI else -- CMPI
-        '1' & I(12 downto 11) & not(I(12) or I(11)) when T_internal = BR and I(7 downto 6) = "00" else -- RR
+        '1' & I(12 downto 11) & not(I(12) or I(11)) when T_internal = RR and I(7 downto 6) = "00" else -- RR
         I(9) & I(12 downto 11) & I(9) when T_internal = RRR else -- RRR
         '1' & I(12 downto 11) & (I(12) or I(11)) when T_internal = RI else -- RI
         (I(12) or I(11)) & I(12 downto 11) & '0' when T_internal = RRI else -- RRI
@@ -135,7 +136,7 @@ begin
         "1111" when T_internal = HCF else -- HCF
         "1111" when T_internal = ILLEGAL; -- ILLEGAL
 
-    control(DIsel) <= 'X' when T_internal = CMPR else -- CMPR
+    control(DIsel) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
         '0' when T_internal = RR else -- RR
         '0' when T_internal = RRR else -- RRR
@@ -147,7 +148,7 @@ begin
         '0' when T_internal = BR else -- BR
         '0' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1';-- when T_internal = ILLEGAL; -- ILLEGAL
+        '1' when T_internal = ILLEGAL; -- ILLEGAL
 
     control(Dlen) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
@@ -261,15 +262,15 @@ begin
         '1' when T_internal = HCF else -- HCF
         '1' when T_internal = ILLEGAL; -- ILLEGAL
 
-    control(MCRle) <= 'X' when T_internal = CMPR else -- CMPR
+    control(MCRle) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
         '1' when T_internal = RR else -- RR
         '1' when T_internal = RRR else -- RRR
         '1' when T_internal = RI else -- RI
         '1' when T_internal = RRI else -- RRI
-        '1' when T_internal = PCRL else -- PCRL
-        '1' when T_internal = LOAD else -- LOAD
-        '1' when T_internal = STORE else -- STORE
+        '0' when T_internal = PCRL else -- PCRL
+        '0' when T_internal = LOAD else -- LOAD
+        '0' when T_internal = STORE else -- STORE
         '1' when T_internal = BR else -- BR
         '1' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
@@ -284,11 +285,11 @@ begin
     control(clken) <= '1' when T_internal = HCF or T_internal = ILLEGAL else
         '0';
     
+    -- set default values to unused signals
     control(Irle) <= '0';
     control(memcen) <= '0';
     control(memoen) <= '0';
     control(memwen) <= '0';
-    
 end arch;
 
 

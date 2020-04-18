@@ -2,7 +2,7 @@
 -- Author: Christian Weaver
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 04/16/2020
+-- Date: 04/17/2020
 -- Lab 10
 -- Design Name: LPU_instructionDecoder
 -- Project Name: Lab10
@@ -73,7 +73,7 @@ begin
         I(2 downto 0) when T_internal = BR else -- BR
         "111" when T_internal = BPCR else -- BPCR
         "111" when T_internal = HCF else -- HCF
-        "111" when T_internal = ILLEGAL; -- ILLEGAL
+        "111"; -- ILLEGAL
         
 
     Bsel <= I(5 downto 3) when T_internal = CMPR else -- CMPR
@@ -88,7 +88,7 @@ begin
         "111" when T_internal = BR else -- BR
         "111" when T_internal = BPCR else -- BPCR
         "111" when T_internal = HCF else -- HCF
-        "111" when T_internal = ILLEGAL; -- ILLEGAL
+        "111"; -- ILLEGAL
         
     Dsel <= "111" when T_internal = CMPR else -- CMPR
         "111" when T_internal = CMPI else -- CMPI
@@ -120,7 +120,7 @@ begin
         (others=>'0') when T_internal = BR else -- BR
         "000000000000000000000000" & I(6 downto 0) & '0' when T_internal = BPCR else -- BPCR
         (others=>'1') when T_internal = HCF else -- HCF
-        (others=>'1') when T_internal = ILLEGAL; -- ILLEGAL
+        (others=>'1'); -- ILLEGAL
 
     ALUfunc <= "0100" when T_internal = CMPR else -- CMPR
         "0100" when T_internal = CMPI else -- CMPI
@@ -134,7 +134,7 @@ begin
         "0000" when T_internal = BR else -- BR
         "0000" when T_internal = BPCR else -- BPCR
         "1111" when T_internal = HCF else -- HCF
-        "1111" when T_internal = ILLEGAL; -- ILLEGAL
+        "1111"; -- ILLEGAL
 
     control(DIsel) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
@@ -148,7 +148,7 @@ begin
         '0' when T_internal = BR else -- BR
         '0' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
 
     control(Dlen) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
@@ -162,7 +162,7 @@ begin
         (not take_branch) or I(11) when T_internal = BR else -- BR
         (not take_branch) or I(11) when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
 
     control(PCAsel) <= '0' when T_internal = CMPR else -- CMPR
         '0' when T_internal = CMPI else -- CMPI
@@ -176,7 +176,7 @@ begin
         '0' when T_internal = BR else -- BR
         '1' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
 
     control(PCle) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
@@ -190,7 +190,7 @@ begin
         (not take_branch) when T_internal = BR else -- BR
         (not take_branch) when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
 
     control(PCie) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
@@ -204,7 +204,7 @@ begin
         '1' when T_internal = BR else -- BR
         '1' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
 
     control(PCDsel) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
@@ -218,7 +218,7 @@ begin
         '1' when T_internal = BR else -- BR
         '1' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
         
     control(IMMBsel) <= '0' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
@@ -232,7 +232,7 @@ begin
         '1' when T_internal = BR else -- BR
         '1' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
 
     control(CCRle) <= '0' when T_internal = CMPR else -- CMPR
         '0' when T_internal = CMPI else -- CMPI
@@ -246,7 +246,7 @@ begin
         '1' when T_internal = BR else -- BR
         '1' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
 
     control(MARle) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
@@ -260,7 +260,7 @@ begin
         '1' when T_internal = BR else -- BR
         '1' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
 
     control(MCRle) <= '1' when T_internal = CMPR else -- CMPR
         '1' when T_internal = CMPI else -- CMPI
@@ -274,7 +274,7 @@ begin
         '1' when T_internal = BR else -- BR
         '1' when T_internal = BPCR else -- BPCR
         '1' when T_internal = HCF else -- HCF
-        '1' when T_internal = ILLEGAL; -- ILLEGAL
+        '1'; -- ILLEGAL
 
     control(membyte) <= I(7) or I(6) when T_internal = LOAD or T_internal = STORE else
         '1';

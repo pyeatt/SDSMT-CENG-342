@@ -2,7 +2,7 @@
 -- Author: Christian Weaver
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 04/21/2020
+-- Date: 04/22/2020
 -- Lab 11
 -- Design Name: LPU_sequencer_TB
 -- Project Name: Lab11

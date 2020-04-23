@@ -29,7 +29,7 @@ end LPU_sequencer;
 
 
 architecture Behavioral of LPU_sequencer is
-    signal curState: state_t := START; -- current state of the sequencer
+    signal curState: state_t; -- current state of the sequencer
     signal nextState: state_t; -- next state of the sequencer
 begin
     -- next state
@@ -44,9 +44,9 @@ begin
                     (curState = FETCH2 and Mrte = '1') else
         EX1 when (curState = FETCH2 and Mrte = '0') or
                  (curState = EX1 and (T = LOAD or T = STORE) and Mrts = '1') else
-        LDST when (curState = EX1 and (T = LOAD or T = STORE) and Mrts = '0') or
-                  (curState = LDST and Mrte = '1') else
-        ERROR;
+        LDST; --when (curState = EX1 and (T = LOAD or T = STORE) and Mrts = '0') or
+--                  (curState = LDST and Mrte = '1') else
+--        ERROR;
     
     
     -- flip-flop

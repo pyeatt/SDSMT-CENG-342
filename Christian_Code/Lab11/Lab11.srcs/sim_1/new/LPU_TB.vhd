@@ -19,18 +19,41 @@ entity LPU_TB is
 end LPU_TB;
 
 architecture arch of LPU_TB is
-    signal clock  : std_logic:='0';
-    signal reset  : std_logic:='1'; -- active low
-    signal Mcen: std_logic; -- active low
-    signal Moen  : std_logic; -- active low
-    signal Mwen : std_logic; -- active low
-    signal Mbyte : std_logic:='0'; -- active low 
-    signal Mhalf : std_logic; -- active low
-    signal Mrts : std_logic; -- active low
-    signal Mrte : std_logic; -- active low
-    signal MAddr  : std_logic_vector(31 downto 0);
-    signal MDatao : std_logic_vector(31 downto 0);
-    signal MDatai : std_logic_vector(31 downto 0):="00000000000000001010101010101010";
+     signal clock  : std_logic:='0';
+     signal reset  : std_logic:='1'; -- active low
+     signal Mcen: std_logic; -- active low
+     signal Moen  : std_logic; -- active low
+     signal Mwen : std_logic; -- active low
+     signal Mbyte : std_logic; -- active low 
+     signal Mhalf : std_logic; -- active low
+     signal Mrts : std_logic := '0'; -- active low
+     signal Mrte : std_logic := '0'; -- active low
+     signal MAddr  : std_logic_vector(31 downto 0);
+     signal MDatao : std_logic_vector(31 downto 0);
+     signal MDatai : std_logic_vector(31 downto 0):="00000000000000001010101010101010";
+    
+     type testInstruction is(
+        myNULL,
+        MOV_R0_AA,
+        MOV_R1_55,
+        myWAIT,
+        OR_R0_55,
+        XOR_R0_55,
+        AND_R0_0F,
+        ADD_R2_R1,
+        LSL_R3_R2_1,
+        LSR_R4_R3_2,
+        LSL_R5_R3_7,
+        LSL_R6_R5_17,
+        ASR_R6_R6_2,
+        ASR_R6_R6_4,
+        ASR_R2_R2_1,
+        ASR_R2_R2_3,
+        NOT_R0_R6
+        );
+    signal instruction: testInstruction := myNULL;
+   
+    signal expectedResult: std_logic_vector(31 downto 0);
 begin
     
     LPU:
@@ -68,54 +91,98 @@ begin
     
     process
     begin
---        -- test RI instructions and fetch2 state
---        MDatai <= "1100010101010000"; -- move immediate aa to r0
---        mready <= '1';
---        wait for 35 ns;
---        mready <= '0';
---        wait for 10 ns;
---        mready <= '1';
---        MDatai <= "1100001010101001"; -- move immediate 55 to r1
---        wait for 36 ns;
---        Mready <= '0';
---        wait for 10 ns;
---        MDatai <= "1101001010101000"; -- or r0 with 55, should get ff
+        -- test RI instructions and fetch2 state
+        --  IT  OP  ImmU8   rd
+        -- |110|XX|XXXXXXXX|XXX|
+        instruction <= MOV_R0_AA;
+        expectedResult <= (others=>'U');
+        MDatai <= "00000000000000001100010101010000"; -- move immediate aa to r0
+        Mrts <= '0';
+        wait for 45 ns;
+        Mrts <= '0';
+        wait for 10 ns;
+        Mrts <= '0';
+        instruction <= MOV_R1_55;
+        expectedResult <= (others=>'U');
+        MDatai <= "00000000000000001100001010101001"; -- move immediate 55 to r1
+        wait for 20 ns;
+        
+        -- test putting LPU into FETCHWAIT from EX1 state
+        instruction <= myWAIT;
+        Mrts <= '1';
+        wait for 39 ns;
+        
+        Mrts <= '0';
+        instruction <= OR_R0_55;
+        expectedResult <= std_logic_vector(to_unsigned(255,32));
+        MDatai <= "00000000000000001101001010101000"; -- or r0 with 55, should get ff
+        wait for 30 ns;
+        instruction <= XOR_R0_55;
+        expectedResult <= std_logic_vector(to_unsigned(170,32));
+        MDatai <= "00000000000000001101101010101000"; -- xor r0 with 55, should get aa
+        wait for 30 ns;
+        instruction <= AND_R0_0F;
+        expectedResult <= std_logic_vector(to_unsigned(10,32));
+        MDatai <= "00000000000000001100100001111000"; -- and r0 with 0f, should get 0a
+        wait for 30 ns;
+        
+        -- test RRI instructions
+        --  IT  OP Imm5  ra  rd
+        -- |101|XX|XXXXX|XXX|XXX|
+        instruction <= ADD_R2_R1;
+        expectedResult <= std_logic_vector(to_unsigned(89,32));
+        MDatai <= "00000000000000001010000100001010"; -- add r2,r1,#4 should get 0x59
+        wait for 30 ns;
+        instruction <= LSL_R3_R2_1;
+        expectedResult <= std_logic_vector(to_unsigned(178,32));
+        MDatai <= "00000000000000001010100001010011"; -- lsl r3,r2,#1 should get B2
+        wait for 30 ns;
+        instruction <= LSR_R4_R3_2;
+        expectedResult <= std_logic_vector(to_unsigned(44,32));
+        MDatai <= "00000000000000001011000010011100"; -- lsr r4,r3,#2 should get 2C
+        wait for 30 ns;
+        instruction <= LSL_R5_R3_7;
+        expectedResult <= std_logic_vector(to_unsigned(22784,32));
+        MDatai <= "00000000000000001010100111011101"; -- lsl r5,r3,#7 should get 5900 and cc and nc
+        wait for 30 ns;
+        instruction <= LSL_R6_R5_17;
+        expectedResult <= "10110010000000000000000000000000";--std_logic_vector(to_unsigned(2986344448,32));
+        MDatai <= "00000000000000001010110001101110"; -- lsl r6,r5,#17 should get b2000000 and cc and ns
+        wait for 30 ns;
+        instruction <= ASR_R6_R6_2;
+        expectedResult <= "11101100100000000000000000000000";--std_logic_vector(to_unsigned(3967811584,32));
+        MDatai <= "00000000000000001011100010110110"; -- asr r6,r6,#2 should get ec800000 and cc and ns
+        wait for 30 ns;
+        instruction <= ASR_R6_R6_4;
+        expectedResult <= "11111110110010000000000000000000";--std_logic_vector(to_unsigned(4274520064,32));
+        MDatai <= "00000000000000001011100100110110"; -- asr r6,r6,#4 should get feC80000 and cc and ns
+        wait for 30 ns;
+        instruction <= ASR_R2_R2_1;
+        expectedResult <= std_logic_vector(to_unsigned(44,32));
+        MDatai <= "00000000000000001011100001010010"; -- asr r2,r2,#1 should get 2C and cs
+        wait for 30 ns;
+        instruction <= ASR_R2_R2_3;
+        expectedResult <= std_logic_vector(to_unsigned(5,32));
+        MDatai <= "00000000000000001011100011010010"; -- asr r2,r2,#3 should get 5 and cs
+        wait for 30 ns;
+        --                          |   R7   |   R6   |   R5   |   R4   |   R3   |   R2   |   R1   |   R0   |
+        -- registers should contain: 00000000 fec80000 00005900 0000002c 000000b2 00000005 00000055 0000000a
+        
+        -- 335 ns into simulation
+        -- test RR instructions
+        --  IT  op MT om res rb  rd
+        -- |100|XX|10|X |00 |XXX|XXX
+        instruction <= NOT_R0_R6;
+        expectedResult <= std_logic_vector(to_unsigned(20447231,32));
+        MDatai <= "00000000000000001000010100110000"; -- not r0,r6  should get 0137FFF
+        wait for 30 ns;
+--        MDatai <= "00000000000000001000110000010011"; -- lsl r3,r2  should get 0x1640
 --        wait for 20 ns;
---        MDatai <= "1101101010101000"; -- xor r0 with 55, should get aa
+--        MDatai <= "00000000000000001001010000010101"; -- lsr r5,r2  should get 02c8
 --        wait for 20 ns;
---        MDatai <= "1100100001111000"; -- and r0 with 0f, should get 0a
+--        MDatai <= "00000000000000001001110000010011"; -- asr r3,r2  should get b2
 --        wait for 20 ns;
---        -- test RRI instructions
---        MDatai <= "1010000100001010"; -- add r2,r1,#4 should get 0x59
---        wait for 20 ns;
---        MDatai <= "1010100001010011"; -- lsl r3,r2,#1 should get B2
---        wait for 20 ns;
---        MDatai <= "1011000010011100"; -- lsr r4,r3,#2 should get 2C
---        wait for 20 ns;
---        MDatai <= "1010100111011101"; -- lsl r5,r3,#7 should get 5900 and cc and nc
---        wait for 20 ns;
---        MDatai <= "1010100001101110"; -- lsl r6,r5,#2 should get b200 and cc and ns
---        wait for 20 ns;
---        MDatai <= "1011100010110110"; -- asr r6,r6,#1 should get ec80 and cc and ns
---        wait for 20 ns;
---        MDatai <= "1011100100110110"; -- asr r6,r6,#1 should get FEC8 and cc and ns
---        wait for 20 ns;
---        MDatai <= "1011100001010010"; -- asr r2,r2,#1 should get 2C and cs
---        wait for 20 ns;
---        MDatai <= "1011100011010010"; -- asr r2,r2,#3 should get 5 and cs
---        wait for 20 ns;
---        -- registers should contain: 0000 fec8 5900 002c 00b2 0005 0055 000a
---        -- 335 ns into simulation
---        -- test RR instructions
---        MDatai <= "1000010100110000"; -- not r0,r6  should get 0137
---        wait for 20 ns;
---        MDatai <= "1000110000010011"; -- lsl r3,r2  should get 0x1640
---        wait for 20 ns;
---        MDatai <= "1001010000010101"; -- lsr r5,r2  should get 02c8
---        wait for 20 ns;
---        MDatai <= "1001110000010011"; -- asr r3,r2  should get b2
---        wait for 20 ns;
---        MDatai <= "1001110000010110"; -- asr r6,r2  should get FFF6
+--        MDatai <= "00000000000000001001110000010110"; -- asr r6,r2  should get FFF6
 --        wait for 20 ns;
 --        -- registers: should contain 0 fff6 02c8 2c b2 5 55 0137
         
@@ -124,68 +191,72 @@ begin
         
 --        -- 455 ns into simulation
 --        -- test RRR instructions
---        MDatai <= "1000000010001011"; -- add r3,r1,r2 should get 005A and cc
+--        --  IT  op MT om rb  ra  rd
+--        -- |100|XX|0 |X |XXX|XXX|XXX
+--        MDatai <= "00000000000000001000000010001011"; -- add r3,r1,r2 should get 005A and cc
 --        wait for 20 ns;
---        MDatai <= "1000000110000001"; -- add r1,r0,r6 should get 012d and cs
+--        MDatai <= "00000000000000001000000110000001"; -- add r1,r0,r6 should get 012d and cs
 --        wait for 20 ns;
---        MDatai <= "1000100010010001"; -- adc r1,r2,r2 should get B and cc
+--        MDatai <= "00000000000000001000100010010001"; -- adc r1,r2,r2 should get B and cc
 --        wait for 20 ns;
---        MDatai <= "1001000101000001"; -- sub r1,r0,r5 should get fe6f and cc
+--        MDatai <= "00000000000000001001000101000001"; -- sub r1,r0,r5 should get fe6f and cc
 --        wait for 20 ns;
---        MDatai <= "1001000000101001"; -- sub r1,r5,r0 should get E6C9 and cs
+--        MDatai <= "00000000000000001001000000101001"; -- sub r1,r5,r0 should get E6C9 and cs
 --        wait for 20 ns;
---        MDatai <= "1001100111010001"; -- sbc r1,r2,r7 should get 4
+--        MDatai <= "00000000000000001001100111010001"; -- sbc r1,r2,r7 should get 4
 --        wait for 20 ns;
---        MDatai <= "1000010100111000"; -- not r0,r7  should get FFFF
+--        MDatai <= "00000000000000001000010100111000"; -- not r0,r7  should get FFFF
 --        wait for 20 ns;
 --        -- registers: should contain 0 ff20 02c8 2c 05a 5 ffff 1bff
---        MDatai <= "1001101000001010"; -- xor r2,r0,r1 should get FFFB
+--        MDatai <= "00000000000000001001101000001010"; -- xor r2,r0,r1 should get FFFB
 --        wait for 20 ns;
---        MDatai <= "1001001000001011"; -- orr r3,r0,r1 should get FFFF
+--        MDatai <= "00000000000000001001001000001011"; -- orr r3,r0,r1 should get FFFF
 --        wait for 20 ns;
---        MDatai <= "1000101000110100"; -- and r4,r6,r0 should get 1b20
+--        MDatai <= "00000000000000001000101000110100"; -- and r4,r6,r0 should get 1b20
 --        wait for 20 ns;
+        
 --        -- test comparison, hcf and illegal instruction
---        MDatai <= "1000011000111101"; -- cmp r5,r7
+        
+--        MDatai <= "00000000000000001000011000111101"; -- cmp r5,r7
 --        wait for 20 ns;
---        MDatai <= "1000011100011001"; -- cmp r5,#0x2c
+--        MDatai <= "00000000000000001000011100011001"; -- cmp r5,#0x2c
 --        wait for 20 ns;
---        MDatai <= "1000011100100001"; -- cmp r5,#0x2b
+--        MDatai <= "00000000000000001000011100100001"; -- cmp r5,#0x2b
 --        wait for 20 ns;
---        MDatai <= "1000011100101001"; -- cmp r5,#0x2d
+--        MDatai <= "00000000000000001000011100101001"; -- cmp r5,#0x2d
 --        wait for 20 ns;
 --        -- PC should contain 003E
 --        -- test branches
---        MDatai <= "1100000000100001"; -- move immediate 4  to r1
+--        MDatai <= "00000000000000001100000000100001"; -- move immediate 4  to r1
 --        wait for 20 ns;
---        MDatai <= "1100000100000000"; -- move immediate 0x20  to r0
+--        MDatai <= "00000000000000001100000100000000"; -- move immediate 0x20  to r0
 --        wait for 20 ns;
---        MDatai <= "1110100000000000";  -- br  r0 r7=unchanged, pc=0020    
+--        MDatai <= "00000000000000001110100000000000";  -- br  r0 r7=unchanged, pc=0020    
 --        wait for 20 ns;
---        MDatai <= "1110000000000001";  -- blr r1 r7=0022, pc=0004 
+--        MDatai <= "00000000000000001110000000000001";  -- blr r1 r7=0022, pc=0004 
 --        wait for 20 ns;
---        MDatai <= "1111100000000101";  -- br  forward r7=unchanged, pc=0056
+--        MDatai <= "00000000000000001111100000000101";  -- br  forward r7=unchanged, pc=0056
 --        wait for 20 ns;
---        MDatai <= "1111000000000110";  -- blr forward r7=0058, pc=005a
+--        MDatai <= "00000000000000001111000000000110";  -- blr forward r7=0058, pc=005a
 --        wait for 20 ns;
---        MDatai <= "1111100001111001";  -- br  backward r7=unchanged, pc=0042
+--        MDatai <= "00000000000000001111100001111001";  -- br  backward r7=unchanged, pc=0042
 --        wait for 20 ns;
---        MDatai <= "1111000001111010";  -- blr backward r7=44, pc=0046
+--        MDatai <= "00000000000000001111000001111010";  -- blr backward r7=44, pc=0046
 --        wait for 20 ns;
 --        -- insert some no-ops
---        MDatai <= "1010000000000000";  -- noop
+--        MDatai <= "00000000000000001010000000000000";  -- noop
 --        wait for 20 ns;
---        MDatai <= "1010000000000000";  -- noop
+--        MDatai <= "00000000000000001010000000000000";  -- noop
 --        wait for 20 ns;
---        MDatai <= "1010000000000000";  -- noop
+--        MDatai <= "00000000000000001010000000000000";  -- noop
 --        wait for 20 ns;
---        MDatai <= "1010000000000000";  -- noop
+--        MDatai <= "00000000000000001010000000000000";  -- noop
 --        wait for 20 ns;
---        MDatai <= "1010000000000000";  -- noop
+--        MDatai <= "00000000000000001010000000000000";  -- noop
 --        wait for 20 ns;
---        MDatai <= "1010000000000000";  -- noop
+--        MDatai <= "00000000000000001010000000000000";  -- noop
 --        wait for 20 ns;
---        MDatai <= "1110000001111000";  -- HCF
+--        MDatai <= "00000000000000001110000001111000";  -- HCF
 --        wait for 20 ns;
         wait;
     end process;

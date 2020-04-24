@@ -36,14 +36,14 @@ begin
     nextState <= START when reset = '0' else
         FETCHWAIT when (curState = START and reset = '1') or 
                        (curState = FETCHWAIT and Mrts = '1')  or 
-                       (curState = EX1 and not(T = LOAD or T = STORE) and Mrts = '1') or
+                       (curState = EX1 and not(T = LOAD or T = STORE or T = PCRL) and Mrts = '1') or
                        (curState = LDST and Mrte = '0') else
         FETCH1 when (curState = FETCHWAIT and Mrts = '0') or
-                    (curState = EX1 and not(T = LOAD or T = STORE) and Mrts = '0') else
+                    (curState = EX1 and not(T = LOAD or T = STORE or T = PCRL) and Mrts = '0') else
         FETCH2 when (curState = FETCH1 and reset = '1') or
                     (curState = FETCH2 and Mrte = '1') else
         EX1 when (curState = FETCH2 and Mrte = '0') or
-                 (curState = EX1 and (T = LOAD or T = STORE) and Mrts = '1') else
+                 (curState = EX1 and (T = LOAD or T = STORE or T = PCRL) and Mrts = '1') else
         LDST; --when (curState = EX1 and (T = LOAD or T = STORE) and Mrts = '0') or
 --                  (curState = LDST and Mrte = '1') else
 --        ERROR;

@@ -2,7 +2,7 @@
 -- Author: Christian Weaver & Dr. Larry Pyeatt
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
--- Date: 04/23/2020
+-- Date: 04/24/2020
 -- Lab 11
 -- Design Name: LPU_TB
 -- Project Name: Lab11
@@ -341,7 +341,7 @@ begin
         wait for 10 ns;
         
         instruction <= myILLEGAL;
-        expectedResult <= std_logic_vector(to_unsigned(28,32));
+        expectedResult <= (others=>'-');
         MDatai <= "00000000000000001110000000011000";  -- ILLEGAL
         wait for 30 ns;
 

@@ -42,10 +42,10 @@ architecture Behavioral of LPU is
     signal Bsel_internal: std_logic_vector(2 downto 0); -- select for register B
     signal Dsel_internal: std_logic_vector(2 downto 0); -- select for register D
     signal ALUfunc_internal: std_logic_vector(3 downto 0); -- function for ALU
-    signal clock_internal: std_logic;
+    --signal clock_internal: std_logic;
 begin
 
-    clock_internal <= clock and CW_SQ_DP_internal(clken);
+    --clock_internal <= clock and CW_SQ_DP_internal(clken);
 
     sequencer: 
         entity work.LPU_sequencer(Behavioral)
@@ -55,7 +55,7 @@ begin
             T => T_internal,
             CWin => CW_SQ_ID_internal,
             CWout => CW_SQ_DP_internal,
-            clk => clock_internal,--clock,
+            clk => clock, --clock_internal,--clock,
             reset => reset
             );
             

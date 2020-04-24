@@ -116,9 +116,9 @@ begin
         "000000000000000000000000" & I(13 downto 8) & "00" when T_internal = LOAD and I(7 downto 6) = "10" else -- LOAD (sz = "10")
         "00000000000000000000000000" & I(13 downto 8) when T_internal = STORE and I(7 downto 6) = "00" else -- STORE (sz = "00")
         "0000000000000000000000000" & I(13 downto 8) & '0' when T_internal = STORE and I(7 downto 6) = "01" else -- STORE (sz = "01")
-        "000000000000000000000000" & I(13 downto 8) & "00" when T_internal = STORE and I(7 downto 6) = "10" else -- STORE (sz = "10")
+        "000000000000000000000000" & I(13 downto 8) & "00" when T_internal = STORE and I(7 downto 6) = "10" else -- STORE (sz = "10")"000000000000000000000000" & I(6 downto 0) & '0' 
         (others=>'0') when T_internal = BR else -- BR
-        "000000000000000000000000" & I(6 downto 0) & '0' when T_internal = BPCR else -- BPCR
+        (7=>I(6), 6=>I(5), 5=>I(4), 4=>I(3), 3=>I(2), 2=>I(1), 1=>I(0), 0=>'0', others=>I(6)) when T_internal = BPCR else -- BPCR
         (others=>'1') when T_internal = HCF else -- HCF
         (others=>'1'); -- ILLEGAL
 

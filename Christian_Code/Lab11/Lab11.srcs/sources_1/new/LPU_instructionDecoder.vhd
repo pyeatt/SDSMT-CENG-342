@@ -282,14 +282,19 @@ begin
     control(memhalf) <= I(7) or (not I(6)) when T_internal = LOAD or T_internal = STORE else
         '1';
         
-    control(clken) <= '1' when T_internal = HCF or T_internal = ILLEGAL else
-        '0';
-    
-    -- set default values to unused signals
+    control(clken) <= '0' when T_internal = HCF or T_internal = ILLEGAL else
+        '1';
+
+    control(memcen) <= '0' when T_internal = LOAD or T_internal = STORE or T_internal = PCRL else
+        '1';
+
+    control(memoen) <= '0' when T_internal = LOAD or T_internal = PCRL else
+        '1';
+
+    control(memwen) <= '0' when T_internal = STORE else
+        '1';
+            
     control(Irle) <= '0';
-    control(memcen) <= '0';
-    control(memoen) <= '0';
-    control(memwen) <= '0';
 end arch;
 
 

@@ -64,7 +64,8 @@ begin
         FETCH1_cw when curState = FETCH1 else
         FETCH2_proceed_cw when curState = FETCH2 and Mrte = '0' else
         FETCH2_cw when curState = FETCH2 and Mrte = '1' else
-        CWin or Ex1_mask when curState = EX1 and (T = LOAD or T = STORE) and Mrts = '1' else
+        CWin or Ex1_mask when (curState = EX1 and (T = LOAD or T = STORE or T = PCRL) and Mrts = '1') or
+                              (curState = LDST and Mrte = '0') else
         CWin;
 
 end Behavioral;

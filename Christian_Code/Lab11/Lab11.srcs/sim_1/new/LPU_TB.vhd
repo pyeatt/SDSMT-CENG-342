@@ -221,7 +221,7 @@ begin
         MDatai <= "00000000000000001001110000010110"; -- asr r6,r2  should get FFF64000?
         wait for 30 ns;
         --                          |   R7   |   R6   |   R5   |   R4   |   R3   |   R2   |   R1   |   R0   |
-        -- registers should contain: 00000000 FFF64000 000002c8 0000002c 00001640 00000005 00000055 0137FFFF
+        -- registers should contain: 00000000 FFF64000 000002c8 0000002c 000000B2 00000005 00000055 0137FFFF
         
         -- MDatai <= "1011001000110100"; -- lsr r4,r6,#8 should get EC
         -- wait for 20 ns;
@@ -271,10 +271,10 @@ begin
         wait for 30 ns;
         instruction <= AND_R4_R6_R0;
         expectedResult <= "11111111111101100100000000000000";
-        MDatai <= "00000000000000001000101000110100"; -- and r4,r6,r0 should get 1b20
+        MDatai <= "00000000000000001000101000110100"; -- and r4,r6,r0 should get FFF64000
         wait for 30 ns;
         --                          |   R7   |   R6   |   R5   |   R4   |   R3   |   R2   |   R1   |   R0   |
-        -- registers should contain: 00000000 FFF64000 000002c8 00001b20 FFFFFFFF FFFFFFFB 00000004 FFFFFFFF
+        -- registers should contain: 00000000 FFF64000 000002c8 FFF64000 FFFFFFFF FFFFFFFB 00000004 FFFFFFFF
 
         -- test comparison, hcf and illegal instruction
         instruction <= CMP_R5_R7;
@@ -335,11 +335,15 @@ begin
         expectedResult <= std_logic_vector(to_unsigned(32,32));
         MDatai <= "00000000000000000100000001000000";  -- STB backward r7=20, pc=0x1C
         wait for 30 ns;
+        if Mcen = '0' then
+            wait until Mcen = '1';
+        end if;
+        wait for 10 ns;
         
---        instruction <= myILLEGAL;
---        expectedResult <= std_logic_vector(to_unsigned(28,32));
---        MDatai <= "00000000000000001110000000011000";  -- ILLEGAL
---        wait for 30 ns;
+        instruction <= myILLEGAL;
+        expectedResult <= std_logic_vector(to_unsigned(28,32));
+        MDatai <= "00000000000000001110000000011000";  -- ILLEGAL
+        wait for 30 ns;
 
         wait;
     end process;

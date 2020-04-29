@@ -70,6 +70,9 @@ package instructionDecoderTestPKG is
             MCRle: std_logic;
             Byte: std_logic;
             Halfword: std_logic;
+            Memcen: std_logic;
+            Memoen: std_logic;
+            Memwen: std_logic;
             CLKen: std_logic;
         end record;
     
@@ -118,6 +121,9 @@ package body instructionDecoderTestPKG is
             control(MCRle) = outputs.MCRle and
             control(membyte) = outputs.Byte and
             control(memhalf) = outputs.Halfword and 
+            control(memcen) = outputs.memcen and 
+            control(memoen) = outputs.memoen and 
+            control(memwen) = outputs.memwen and 
             control(clken) = outputs.CLKen then
             return '1';
         else
@@ -202,6 +208,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(CMPR2) <= (
@@ -223,6 +232,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(CMPI1) <= (
@@ -244,6 +256,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(CMPI2) <= (
@@ -265,6 +280,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(RR1) <= (
@@ -286,6 +304,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(RR2) <= (
@@ -307,6 +328,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(RRR1) <= (
@@ -328,6 +352,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(RRR2) <= (
@@ -349,6 +376,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(RI1) <= (
@@ -370,6 +400,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(RI2) <= (
@@ -391,6 +424,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(RRI1) <= (
@@ -412,6 +448,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(RRI2) <= (
@@ -433,6 +472,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(PCRL1) <= (
@@ -454,6 +496,9 @@ begin
         MCRle => '0',
         Byte => '1',
         Halfword => '1',
+        Memcen => '0',
+        Memoen => '0',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(PCRL2) <= (
@@ -475,6 +520,9 @@ begin
         MCRle => '0',
         Byte => '1',
         Halfword => '1',
+        Memcen => '0',
+        Memoen => '0',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(LOAD1) <= (
@@ -496,6 +544,9 @@ begin
         MCRle => '0',
         Byte => '0',
         Halfword => '1',
+        Memcen => '0',
+        Memoen => '0',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(LOAD2) <= (
@@ -517,6 +568,9 @@ begin
         MCRle => '0',
         Byte => '1',
         Halfword => '1',
+        Memcen => '0',
+        Memoen => '0',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(STORE1) <= (
@@ -538,6 +592,9 @@ begin
         MCRle => '0',
         Byte => '0',
         Halfword => '1',
+        Memcen => '0',
+        Memoen => '1',
+        Memwen => '0',
         CLKen => '1'
         );
     outputs(STORE2) <= (
@@ -559,6 +616,9 @@ begin
         MCRle => '0',
         Byte => '1',
         Halfword => '1',
+        Memcen => '0',
+        Memoen => '1',
+        Memwen => '0',
         CLKen => '1'
         );
     outputs(BR1) <= (
@@ -580,6 +640,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(BR2) <= (
@@ -601,6 +664,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(BPCR1) <= (
@@ -622,6 +688,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(BPCR2) <= (
@@ -643,6 +712,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '1'
         );
     outputs(HCF1) <= (
@@ -664,6 +736,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '0'
         );
     outputs(HCF2) <= (
@@ -685,6 +760,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '0'
         );
     outputs(ILLEGAL1) <= (
@@ -706,6 +784,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '0'
         );
     outputs(ILLEGAL2) <= (
@@ -727,6 +808,9 @@ begin
         MCRle => '1',
         Byte => '1',
         Halfword => '1',
+        Memcen => '1',
+        Memoen => '1',
+        Memwen => '1',
         CLKen => '0'
         );
 

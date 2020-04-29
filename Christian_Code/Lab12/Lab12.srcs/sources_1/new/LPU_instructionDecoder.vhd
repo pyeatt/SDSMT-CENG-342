@@ -105,18 +105,22 @@ begin
         "111"; -- ILLEGAL
 
     IMM <= (others=>'1') when T_internal = CMPR else -- CMPR
-        "0000000000000000000000000" & I(12 downto 11) & I(7 downto 3) when T_internal = CMPI else -- CMPI
+        --"0000000000000000000000000" & I(12 downto 11) & I(7 downto 3) when T_internal = CMPI else -- CMPI
+        (6=>I(12), 5=>I(11), 4=>I(7), 3=>I(6), 2=>I(5), 1=>I(4), 0=>I(3), others=>I(12)) when T_internal = CMPI else -- CMPI
         (others=>'1') when T_internal = RR else -- RR
         (others=>'1') when T_internal = RRR else -- RRR
         "000000000000000000000000" & I(10 downto 3) when T_internal = RI else -- RI
-        "000000000000000000000000000" & I(10 downto 6) when T_internal = RRI else -- RRI
+        --(6=>I(10), 6=>I(9), 5=>I(8), 4=>I(7), 3=>I(6), 2=>I(5), 1=>I(4), 0=>I(3), others=>I(10)) when T_internal = RI else -- RI
+        --"000000000000000000000000000" & I(10 downto 6) when T_internal = RRI else -- RRI
+        (4=>I(10), 3=>I(9), 2=>I(8), 1=>I(7), 0=>I(6), others=>(I(10) and (not (I(12) or I(11))))) when T_internal = RRI else -- RRI
         "00000000000000000000000" & I(13 downto 6) & '0' when T_internal = PCRL else -- PCRL
-        "00000000000000000000000000" & I(13 downto 8) when T_internal = LOAD and I(7 downto 6) = "00" else -- LOAD (sz = "00")
-        "0000000000000000000000000" & I(13 downto 8) & '0' when T_internal = LOAD and I(7 downto 6) = "01" else -- LOAD (sz = "01")
-        "000000000000000000000000" & I(13 downto 8) & "00" when T_internal = LOAD and I(7 downto 6) = "10" else -- LOAD (sz = "10")
-        "00000000000000000000000000" & I(13 downto 8) when T_internal = STORE and I(7 downto 6) = "00" else -- STORE (sz = "00")
-        "0000000000000000000000000" & I(13 downto 8) & '0' when T_internal = STORE and I(7 downto 6) = "01" else -- STORE (sz = "01")
-        "000000000000000000000000" & I(13 downto 8) & "00" when T_internal = STORE and I(7 downto 6) = "10" else -- STORE (sz = "10")"000000000000000000000000" & I(6 downto 0) & '0' 
+        --"00000000000000000000000000" & I(13 downto 8) when T_internal = LOAD and I(7 downto 6) = "00" else -- LOAD (sz = "00")
+        (5=>I(13), 4=>I(12), 3=>I(11), 2=>I(10), 1=>I(9), 0=>I(8), others=>I(13)) when T_internal = LOAD and I(7 downto 6) = "00" else -- LOAD (sz = "00")
+        (6=>I(13), 5=>I(12), 4=>I(11), 3=>I(10), 2=>I(9), 1=>I(8), 0=>'0', others=>I(13)) when T_internal = LOAD and I(7 downto 6) = "01" else -- LOAD (sz = "01")
+        (7=>I(13), 6=>I(12), 5=>I(11), 4=>I(10), 3=>I(9), 2=>I(8), 1=>'0', 0=>'0', others=>I(13)) when T_internal = LOAD and I(7 downto 6) = "10" else -- LOAD (sz = "10")
+        (5=>I(13), 4=>I(12), 3=>I(11), 2=>I(10), 1=>I(9), 0=>I(8), others=>I(13)) when T_internal = STORE and I(7 downto 6) = "00" else -- STORE (sz = "00")
+        (6=>I(13), 5=>I(12), 4=>I(11), 3=>I(10), 2=>I(9), 1=>I(8), 0=>'0', others=>I(13)) when T_internal = STORE and I(7 downto 6) = "01" else -- STORE (sz = "01")
+        (7=>I(13), 6=>I(12), 5=>I(11), 4=>I(10), 3=>I(9), 2=>I(8), 1=>'0', 0=>'0', others=>I(13)) when T_internal = STORE and I(7 downto 6) = "10" else -- STORE (sz = "10")"000000000000000000000000" & I(6 downto 0) & '0' 
         (others=>'0') when T_internal = BR else -- BR
         (7=>I(6), 6=>I(5), 5=>I(4), 4=>I(3), 3=>I(2), 2=>I(1), 1=>I(0), 0=>'0', others=>I(6)) when T_internal = BPCR else -- BPCR
         (others=>'1') when T_internal = HCF else -- HCF

@@ -298,7 +298,7 @@ begin
     control(memwen) <= '0' when T_internal = STORE else
         '1';
             
-    control(Irle) <= '0';
+    control(Irle) <= '1';
 end arch;
 
 

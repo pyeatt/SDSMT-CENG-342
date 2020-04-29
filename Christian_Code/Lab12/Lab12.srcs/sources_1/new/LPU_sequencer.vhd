@@ -34,7 +34,7 @@ architecture Behavioral of LPU_sequencer is
 begin
     -- next state
     nextState <= START when reset = '0' else
-        curState when CWin(clken) = '0' else -- handle ILLEGAL and HCL
+        curState when CWin(clken) = '0' else -- handle ILLEGAL and HCF
         FETCHWAIT when (curState = START and reset = '1') or 
                        (curState = FETCHWAIT and Mrts = '1') or 
                        (curState = EX1 and not(T = LOAD or T = STORE or T = PCRL) and Mrts = '1') or

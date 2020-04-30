@@ -45,9 +45,7 @@ begin
                     (curState = FETCH2 and Mrte = '1') else
         EX1 when (curState = FETCH2 and Mrte = '0') or
                  (curState = EX1 and (T = LOAD or T = STORE or T = PCRL) and Mrts = '1') else
-        LDST; --when (curState = EX1 and (T = LOAD or T = STORE) and Mrts = '0') or
---                  (curState = LDST and Mrte = '1') else
---        ERROR;
+        LDST;
     
     
     -- flip-flop

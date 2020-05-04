@@ -3,9 +3,9 @@
 -- Class: CENG-342
 -- Instructor: Dr. Pyeatt
 -- Date: 04/11/2020
--- Lab 12
--- Design Name: LPU_helperPKG
--- Project Name: Lab12
+-- Lab 10
+-- Design Name: LPU_instructionDecoder
+-- Project Name: Lab10
 ----------------------------------------------------------------------------------
 
 

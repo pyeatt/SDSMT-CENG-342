@@ -5,3 +5,6 @@ Please look at your group on discord to find which group branch you should be wo
 
 OK.  So next time we have a global pandemic, I will set up the repo, and the first four on-line lectures will be about how to navigate the repo.  
 .. Dr. P.
+
+Thanks very much for pulling together and setting this up.
+
